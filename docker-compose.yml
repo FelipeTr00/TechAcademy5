@@ -1,33 +1,17 @@
-version: '3.8'
-
 services:
   mysql:
-    image: mysql:8.0
-    container_name: mysql_db
-    restart: always
+    image: mysql:latest
+    container_name: app
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: meu_banco
-      MYSQL_USER: usuario
-      MYSQL_PASSWORD: senha123
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: app
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 999
     ports:
-      - "3306:3306"
+      - "3308:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-
-  backend:
-    build: .
-    container_name: app_backend
-    restart: always
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mysql
-    environment:
-      DB_HOST: mysql
-      DB_USER: user
-      DB_PASSWORD: techforge
-      DB_NAME: garagem
+      - mysql-data:/var/lib/mysql
+      - ./dba.sql:/docker-entrypoint-initdb.d/dba.sql
 
 volumes:
-  mysql_data:
+  mysql-data:
