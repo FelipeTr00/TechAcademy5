@@ -1,6 +1,6 @@
 import express from "express";
 import sequelize from "./config/database";
-import UserModel from "./models/UserModel";
+import UserModel from "./model/UserModel";
 
 const app = express();
 const port = 3000;
