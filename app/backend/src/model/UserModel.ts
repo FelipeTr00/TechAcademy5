@@ -1,25 +1,90 @@
-import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database";
+import { Model, DataTypes, Optional } from "sequelize";
+import database from "../database"; 
+import bcrypt from "bcrypt";
 
-class UserModel extends Model {}
+export interface IUser {
+  id: number;
+  name: string;
+  email: string;
+  passwd: string;
+  access: "user" | "admin" | "guest";
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
-UserModel.init(
+export interface IUserAttributes extends Optional<IUser, "id" | "createdAt" | "updatedAt"> {}
+
+export class User extends Model<IUser, IUserAttributes> implements IUser {
+  public id!: number;
+  public name!: string;
+  public email!: string;
+  public passwd!: string;
+  public access!: "user" | "admin" | "guest";
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+User.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
     name: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    email: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+      unique: true,
+      validate: {
+        is: {
+          args: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+          msg: "Invalid email format",
+        },
+      },
+    },
+    passwd: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    access: {
+      type: DataTypes.ENUM("user", "admin", "guest"),
+      allowNull: false,
+      defaultValue: "user",
+    },
   },
   {
-    sequelize,
-    modelName: "UserModel",
-    tableName: "users",
+    tableName: "user",
+    sequelize: database,
+    hooks: {
+      beforeCreate: async (user: User) => {
+        user.passwd = await bcrypt.hash(user.passwd, 10);
+      },
+      beforeUpdate: async (user: User) => {
+        if (user.changed("passwd")) {
+          user.passwd = await bcrypt.hash(user.passwd, 10);
+        }
+      },
+    },
   }
 );
 
-export default UserModel;
+export default User;
+
+
+
+async function createUser() {
+  const novoUser = await User.create({
+    name: "Admin",
+    email: "admin@admin.com",
+    passwd: "passwd",
+    access: "admin",
+  });
+  console.log(novoUser);
+}
+
+createUser();
