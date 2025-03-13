@@ -1,5 +1,20 @@
 # RODAR O BACKEND
 
+### .env
+```
+    DB_HOST=localhost
+    DB_PORT=3307
+    DB_USER=root
+    DB_PASSWD=root
+    DATABASE=db
+    JWT_SECRET=Ae74Tsdf799Hw92-3f-0-vqd8-99999
+    JWT_EXPIRES_IN=7d
+
+
+```
+
+
+
 ### docker & mysql
 ```
     docker compose up -d

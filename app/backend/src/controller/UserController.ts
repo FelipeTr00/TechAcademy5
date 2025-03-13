@@ -13,3 +13,6 @@ export async function getUserByIdController(req: Request, res: Response) {
     res.status(500).json({ message: "Erro ao buscar usuário" });
   }
 };
+
+
+

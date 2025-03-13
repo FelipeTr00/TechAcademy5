@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from "sequelize";
-import database from "../database"; 
+import database from "../config"; 
 import bcrypt from "bcrypt";
 
 export interface IUser {
@@ -23,6 +23,11 @@ export class User extends Model<IUser, IUserAttributes> implements IUser {
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public async validatePassword() {
+    return await bcrypt.compare(this.passwd, this.passwd!)
+  }
+
 }
 
 User.init(
@@ -76,7 +81,7 @@ User.init(
 export default User;
 
 
-
+/*
 async function createUser() {
   const novoUser = await User.create({
     name: "Admin",
@@ -88,3 +93,4 @@ async function createUser() {
 }
 
 createUser();
+*/
