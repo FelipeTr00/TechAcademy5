@@ -7,7 +7,7 @@ const JWT_EXPIRES_IN = config.JWT_EXPIRES_IN || '1d'
 
 export const generateToken = (user: User): string => {
     return jwt.sign({ id: user.id, email: user.email },
-         JWT_SECRET, { expiresIn: '30d' });
+         JWT_SECRET, { expiresIn: '1d' });
 };
 
 export const verifyToken = (token: string) => {

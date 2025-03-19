@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { getUserByIdController } from "./controller/UserController";
+import { login } from "./controller/authController";
+import { getUserById } from "./controller/UserController";
+import { authenticateToken } from "./middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/id/:id", getUserByIdController);
+router.post("/login", login);
+router.post("/get-user", authenticateToken, getUserById);
 
 export default router;

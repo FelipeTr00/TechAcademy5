@@ -81,16 +81,18 @@ User.init(
 export default User;
 
 
-/*
-async function createUser() {
-  const novoUser = await User.create({
-    name: "Admin",
-    email: "admin@admin.com",
-    passwd: "passwd",
-    access: "admin",
-  });
-  console.log(novoUser);
+async function createAdmUser() {
+  try {
+    const novoUser = await User.create({
+      name: "Admin",
+      email: "admin@admin.com",
+      passwd: "passwd",
+      access: "admin",
+    });
+    console.log(novoUser);
+  } catch (error) {
+    console.log(error);
+     }
 }
 
-createUser();
-*/
+createAdmUser();
