@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <section className={styles.home_container}>
       <h1>
-        Bem vindo ao <span>XCARROS</span>
+        Bem vindo ao <span>WEB-CARROS</span>
       </h1>
       <Link to="/">
         <img src={principal} alt="xcarros" />{" "}

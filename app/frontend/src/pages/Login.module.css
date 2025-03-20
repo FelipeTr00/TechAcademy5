@@ -1,0 +1,110 @@
+.login_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 150vh;
+}
+
+.login_container h2 {
+  color: #0d0d0d;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.login_container form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input_container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input_container input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  margin: 10px 0;
+  border: 1px solid #0d0d0d;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.icon {
+  position: absolute;
+  right: 10px;
+  color: #555;
+}
+
+.login_container form input:focus {
+  outline: none;
+  border: 1px solid #ff8e3c;
+}
+
+.login_container form input::placeholder {
+  color: #0d0d0d;
+}
+
+.recallForget {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.forgotPassword {
+  color: #ff8e3c;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgotPassword:hover {
+  text-decoration: underline;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  background: #ff8e3c;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submitButton:hover {
+  background: #e67e22;
+}
+
+.register {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.register a {
+  color: #ff8e3c;
+  text-decoration: none;
+}
+
+.register a:hover {
+  text-decoration: underline;
+}
