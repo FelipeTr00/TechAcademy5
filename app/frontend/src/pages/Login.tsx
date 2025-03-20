@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -17,25 +18,21 @@ const Login = () => {
     setLoading(true);
     setError("");
     setSuccess("");
+
     if (!email || !password) {
       setError("Preencha todos os campos");
       setLoading(false);
       return;
     }
+
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password, rememberMe }),
+      const { data } = await axios.post("http://localhost:5000/api/login", {
+        email,
+        password,
       });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao fazer login");
-      }
 
       localStorage.setItem("token", data.token);
+
       setSuccess("Login realizado com sucesso!");
       setEmail("");
       setPassword("");
@@ -43,7 +40,15 @@ const Login = () => {
 
       navigate("/home");
     } catch (error) {
-      setError(error.message);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setError(error.response.data.message || "Erro ao realizar login");
+        } else {
+          setError("Erro de conexão");
+        }
+      } else {
+        setError("Erro inesperado");
+      }
       setLoading(false);
     }
   };
