@@ -91,7 +91,7 @@ async function createAdmUser() {
     });
     console.log(novoUser);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
      }
 }
 

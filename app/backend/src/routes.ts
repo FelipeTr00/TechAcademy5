@@ -1,11 +1,304 @@
 import { Router } from "express";
 import { login } from "./controller/authController";
-import { getUserById } from "./controller/UserController";
+import { getUserById,
+         createUser,
+         updateUser, 
+         destroyUser,
+         patchUser,
+         getMe } from "./controller/UserController";
 import { authenticateToken } from "./middleware/authMiddleware";
 
 const router = Router();
 
+/**
+ * @swagger
+ * tags:
+ *   - name: Autenticação
+ *     description: Endpoints para autenticação de usuários
+ *   - name: Usuário
+ *     description: Endpoints para operações de usuários autenticados
+ */
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Autentica um usuário e retorna um token JWT
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "admin@admin.com"
+ *               passwd:
+ *                 type: string
+ *                 example: "passwd"
+ *     responses:
+ *       200:
+ *         description: Login bem-sucedido, retorna um token JWT.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIs..."
+ *       401:
+ *         description: Credenciais inválidas
+ */
 router.post("/login", login);
+
+/**
+ * @swagger
+ * /get-user:
+ *   post:
+ *     summary: Retorna os dados do usuário autenticado
+ *     tags: [Usuário]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Retorna os dados do usuário autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: number
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   example: "Admin"
+ *                 email:
+ *                   type: string
+ *                   example: "admin@admin.com"
+ *       401:
+ *         description: Token inválido ou não fornecido
+ */
 router.post("/get-user", authenticateToken, getUserById);
 
+/**
+ * @swagger
+ * /me:
+ *   get:
+ *     summary: Retorna os dados do usuário autenticado
+ *     tags: [Usuário]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: "Dados do usuário autenticado."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: number
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Admin"
+ *                     email:
+ *                       type: string
+ *                       example: "admin@admin.com"
+ *                     access:
+ *                       type: string
+ *                       example: "admin"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       401:
+ *         description: "Usuário não autenticado ou token inválido."
+ *       404:
+ *         description: "Usuário não encontrado."
+ *       500:
+ *         description: "Erro ao buscar usuário."
+ */
+router.get("/me", authenticateToken, getMe);
+
+/**
+ * @swagger
+ * /new-user:
+ *   post:
+ *     summary: Cria um novo usuário
+ *     tags: [Usuário]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Admin"
+ *               email:
+ *                 type: string
+ *                 example: "admin@admin.com"
+ *               passwd1:
+ *                 type: string
+ *                 example: "senha123"
+ *               passwd2:
+ *                 type: string
+ *                 example: "senha123"
+ *               access:
+ *                 type: string
+ *                 enum: [user, admin, guest]
+ *                 example: "admin"
+ *     responses:
+ *       201:
+ *         description: "Usuário criado com sucesso."
+ *       400:
+ *         description: "Erro na requisição (ex: senhas não coincidem)."
+ *       500:
+ *         description: "Erro interno ao criar usuário."
+ */
+router.post("/new-user", createUser);
+
+
+/**
+ * @swagger
+ * /update-user:
+ *   put:
+ *     summary: Atualiza os dados do usuário autenticado
+ *     tags: [Usuário]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Novo Nome"
+ *               email:
+ *                 type: string
+ *                 example: "novoemail@email.com"
+ *               passwd:
+ *                 type: string
+ *                 example: "novaSenha123"
+ *               access:
+ *                 type: string
+ *                 enum: [user, admin, guest]
+ *                 example: "admin"
+ *     responses:
+ *       200:
+ *         description: "Usuário atualizado com sucesso."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Usuário atualizado com sucesso."
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: number
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Novo Nome"
+ *                     email:
+ *                       type: string
+ *                       example: "novoemail@email.com"
+ *                     access:
+ *                       type: string
+ *                       example: "admin"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: "Requisição inválida (ex: dados faltando)."
+ *       401:
+ *         description: "Usuário não autenticado ou token inválido."
+ *       500:
+ *         description: "Erro ao atualizar usuário."
+ */
+router.put("/update-user", authenticateToken, updateUser);
+
+
+/**
+ * @swagger
+ * /delete-user:
+ *   delete:
+ *     summary: Exclui a conta do usuário autenticado
+ *     tags: [Usuário]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: "Usuário excluído com sucesso."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Usuário excluído com sucesso."
+ *       401:
+ *         description: "Usuário não autenticado ou token inválido."
+ *       404:
+ *         description: "Usuário não encontrado."
+ *       500:
+ *         description: "Erro ao excluir usuário."
+ */
+router.delete("/delete-user", authenticateToken, destroyUser);
+
+
+/**
+ * @swagger
+ * /patch-user:
+ *   patch:
+ *     summary: Atualiza parcialmente os dados do usuário autenticado
+ *     tags: [Usuário]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Novo Nome"
+ *               email:
+ *                 type: string
+ *                 example: "novoemail@email.com"
+ *     responses:
+ *       200:
+ *         description: "Usuário atualizado com sucesso."
+ *       401:
+ *         description: "Usuário não autenticado ou token inválido."
+ *       500:
+ *         description: "Erro ao atualizar usuário."
+ */
+router.patch("/patch-user", authenticateToken, patchUser);
+
 export default router;
+
