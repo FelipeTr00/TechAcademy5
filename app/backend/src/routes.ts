@@ -7,6 +7,7 @@ import { getUserById,
          patchUser,
          getMe } from "./controller/UserController";
 import { authenticateToken } from "./middleware/authMiddleware";
+import * as VehicleController from './controller/VehicleController';
 
 const router = Router();
 
@@ -304,6 +305,155 @@ router.delete("/delete-user", authenticateToken, destroyUser);
  *         description: "Erro ao atualizar usuário."
  */
 router.patch("/patch-user", authenticateToken, patchUser);
+
+/**
+ * @swagger
+ * /create-vehicle:
+ *   post:
+ *     summary: Criar um novo veículo
+ *     tags: [Veículos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               CodigoFipe:
+ *                 type: string
+ *                 description: Código FIPE do veículo
+ *               Tipo:
+ *                 type: string
+ *                 description: Tipo do veículo (carro, moto, etc.)
+ *               Marca:
+ *                 type: string
+ *               Modelo:
+ *                 type: string
+ *               Combustivel:
+ *                 type: string
+ *               anoModelo:
+ *                 type: integer
+ *                 description: Ano do modelo
+ *               Valor:
+ *                 type: string
+ *                 description: Valor do veículo (string formatada)
+ *               ValorFipe:
+ *                 type: number
+ *                 format: float
+ *     responses:
+ *       201:
+ *         description: Veículo criado com sucesso
+ */
+router.post('/create-vehicle', VehicleController.create);
+
+
+/**
+ * @swagger
+ * /get-vehicles:
+ *   post:
+ *     summary: Buscar veículos por tipo e ano
+ *     tags: [Veículos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tipo:
+ *                 type: string
+ *                 example: carros
+ *               ano:
+ *                 type: integer
+ *                 example: 2020
+ *     responses:
+ *       200:
+ *         description: Lista de veículos filtrada por tipo e ano
+ */
+router.post('/get-vehicles', VehicleController.getByFilters);
+
+
+/**
+ * @swagger
+ * /get-vehicle:
+ *   get:
+ *     summary: Buscar um veículo por ID
+ *     tags: [Veículos]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Dados do veículo encontrado
+ *       404:
+ *         description: Veículo não encontrado
+ */
+router.get('/get-vehicle', VehicleController.getById);
+
+/**
+ * @swagger
+ * /update-vehicle:
+ *   put:
+ *     summary: Atualizar um veículo por ID
+ *     tags: [Veículos]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Tipo:
+ *                 type: string
+ *               Marca:
+ *                 type: string
+ *               Modelo:
+ *                 type: string
+ *               Combustivel:
+ *                 type: string
+ *               anoModelo:
+ *                 type: integer
+ *               Valor:
+ *                 type: string
+ *               ValorFipe:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Veículo atualizado com sucesso
+ *       404:
+ *         description: Veículo não encontrado
+ */
+router.put('/update-vehicle', VehicleController.update);
+
+/**
+ * @swagger
+ * /delete-vehicle:
+ *   delete:
+ *     summary: Remover um veículo por ID
+ *     tags: [Veículos]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Veículo removido com sucesso
+ *       404:
+ *         description: Veículo não encontrado
+ */
+router.delete('/delete-vehicle', VehicleController.remove);
+
 
 export default router;
 
