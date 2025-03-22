@@ -32,13 +32,15 @@ const Login = () => {
       });
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("userName", data.userName);
 
       setSuccess("Login realizado com sucesso!");
       setEmail("");
       setPassword("");
       setLoading(false);
 
-      navigate("/home");
+      navigate(`/home`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
