@@ -6,8 +6,12 @@ import {
   deleteUser,
   whoAmI
 } from "../service/UserService";
+import {  isValidCPF,
+          PasswordStrength,
+          getPasswordStrength } from '../repository/UserRepository'
 import { User } from '../model/UserModel'
 
+      
 export async function getUserById(req: Request, res: Response) {
   const userId = (req as any).user.id;
 
@@ -52,9 +56,9 @@ export const getMe = async (req: Request, res: Response) => {
 
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, passwd1, passwd2, access } = req.body;
+  const { name, email, passwd1, passwd2, cpf, access } = req.body;
 
-  if (!name || !email || !passwd1 || !passwd2 || !access) {
+  if (!name || !email || !passwd1 || !passwd2 || !cpf || !access) {
     return res.status(400).json({ message: "Preencha todos os campos." });
   }
 
@@ -62,14 +66,23 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Senhas diferentes." });
   }
 
-  try {
-    const newUser = await insertUser({ name, email, passwd: passwd1, access });
+  const passwdLevel = getPasswordStrength(passwd1);
+  if (passwdLevel === "fraca") {
+    return res.status(400).json({ message: "Senha muito fraca. Use letras, números e símbolos." });
+  }
 
+  if (!isValidCPF(cpf)) {
+    return res.status(400).json({ message: "CPF inválido." });
+  }
+
+  try {
+    const newUser = await insertUser({ name, email, passwd: passwd1, cpf, access });
     res.status(201).json({ message: "[SUCESSO]", user: newUser });
   } catch (error) {
     res.status(500).json({ message: "[ERRO] ao criar usuário." });
   }
 };
+
 
 export const updateUser = async (req: Request, res: Response) => {
     
@@ -90,6 +103,7 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+
 export const patchUser = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const updateData = req.body;
@@ -107,6 +121,7 @@ export const patchUser = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const destroyUser = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;

@@ -13,10 +13,12 @@ const router = Router();
 /**
  * @swagger
  * tags:
- *   - name: Autenticação
- *     description: Endpoints para autenticação de usuários
+ *   - name: Login
+ *     description: Endpoint para autenticação de usuários.
  *   - name: Usuário
- *     description: Endpoints para operações de usuários autenticados
+ *     description: Endpoints para operações de usuários autenticados.
+ *   - name: Veículos
+ *     description: Endpoints para operações de veículos.
  */
 
 /**
@@ -24,7 +26,7 @@ const router = Router();
  * /login:
  *   post:
  *     summary: Autentica um usuário e retorna um token JWT
- *     tags: [Autenticação]
+ *     tags: [Login]
  *     requestBody:
  *       required: true
  *       content:
@@ -34,7 +36,7 @@ const router = Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: "admin@admin.com"
+ *                 example: "test@email.com"
  *               passwd:
  *                 type: string
  *                 example: "passwd"
@@ -75,10 +77,10 @@ router.post("/login", login);
  *                   example: 1
  *                 name:
  *                   type: string
- *                   example: "Admin"
+ *                   example: "Test"
  *                 email:
  *                   type: string
- *                   example: "admin@admin.com"
+ *                   example: "test@email.com"
  *       401:
  *         description: Token inválido ou não fornecido
  */
@@ -86,7 +88,7 @@ router.post("/get-user", authenticateToken, getUserById);
 
 /**
  * @swagger
- * /me:
+ * /get-user:
  *   get:
  *     summary: Retorna os dados do usuário autenticado
  *     tags: [Usuário]
@@ -108,10 +110,10 @@ router.post("/get-user", authenticateToken, getUserById);
  *                       example: 1
  *                     name:
  *                       type: string
- *                       example: "Admin"
+ *                       example: "Test"
  *                     email:
  *                       type: string
- *                       example: "admin@admin.com"
+ *                       example: "test@email.com"
  *                     access:
  *                       type: string
  *                       example: "admin"
@@ -128,7 +130,7 @@ router.post("/get-user", authenticateToken, getUserById);
  *       500:
  *         description: "Erro ao buscar usuário."
  */
-router.get("/me", authenticateToken, getMe);
+router.get("/get-user", authenticateToken, getMe);
 
 /**
  * @swagger
@@ -145,16 +147,19 @@ router.get("/me", authenticateToken, getMe);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Admin"
+ *                 example: "Test"
  *               email:
  *                 type: string
- *                 example: "admin@admin.com"
+ *                 example: "test2@email.com"
  *               passwd1:
  *                 type: string
  *                 example: "senha123"
  *               passwd2:
  *                 type: string
  *                 example: "senha123"
+ *               cpf:
+ *                 type: string
+ *                 example: "00581361008"
  *               access:
  *                 type: string
  *                 enum: [user, admin, guest]
@@ -190,7 +195,7 @@ router.post("/new-user", createUser);
  *                 example: "Novo Nome"
  *               email:
  *                 type: string
- *                 example: "novoemail@email.com"
+ *                 example: "email@email.com"
  *               passwd:
  *                 type: string
  *                 example: "novaSenha123"
@@ -220,7 +225,7 @@ router.post("/new-user", createUser);
  *                       example: "Novo Nome"
  *                     email:
  *                       type: string
- *                       example: "novoemail@email.com"
+ *                       example: "email@email.com"
  *                     access:
  *                       type: string
  *                       example: "admin"
@@ -289,7 +294,7 @@ router.delete("/delete-user", authenticateToken, destroyUser);
  *                 example: "Novo Nome"
  *               email:
  *                 type: string
- *                 example: "novoemail@email.com"
+ *                 example: "email@email.com"
  *     responses:
  *       200:
  *         description: "Usuário atualizado com sucesso."

@@ -11,6 +11,7 @@ export const insertUser = async ({
   name,
   email,
   passwd,
+  cpf,
   access,
 }: Omit<IUser, "id" | "createdAt" | "updatedAt">) => {
   try {
@@ -18,6 +19,7 @@ export const insertUser = async ({
       name,
       email,
       passwd,
+      cpf,
       access,
     });
 
@@ -36,13 +38,13 @@ export const updateUser = async (
 
 export const alterUser = async (
   id: number,
-  updateData: Partial<Omit<IUser, "id" | "createdAt" | "updatedAt">>
+  updateData: Partial<Omit<IUser, "id" | "email" | "createdAt" | "updatedAt">>
 ) => {
   try {
     const user = await User.findByPk(id);
 
     if (!user) {
-      throw new Error("Usuário não encontrado.");
+      throw new Error("Usuário ou senha inválidos.");
     }
 
     if (updateData.passwd) {
@@ -79,7 +81,7 @@ export const whoAmI = async (id: number) => {
       });
   
       if (!user) {
-        throw new Error("Usuário não encontrado.");
+        throw new Error("Usuário ou senha inválidos.");
       }
   
       return user;

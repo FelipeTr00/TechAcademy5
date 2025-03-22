@@ -1,12 +1,14 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import database from "../config"; 
 import bcrypt from "bcrypt";
+import { isValidCPF } from "../repository/UserRepository";
 
 export interface IUser {
   id: number;
   name: string;
   email: string;
   passwd: string;
+  cpf: string;
   access: "user" | "admin" | "guest";
   createdAt?: Date;
   updatedAt?: Date;
@@ -19,6 +21,7 @@ export class User extends Model<IUser, IUserAttributes> implements IUser {
   public name!: string;
   public email!: string;
   public passwd!: string;
+  public cpf!: string;
   public access!: "user" | "admin" | "guest";
 
   public readonly createdAt!: Date;
@@ -56,6 +59,18 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    cpf: {
+      type: DataTypes.STRING(14),
+      allowNull: false,
+      unique: true,
+      validate: {
+        isCpfValid(value: string) {
+          if (!isValidCPF(value)) {
+            throw new Error("CPF inválido");
+          }
+        },
+      },
+    },
     access: {
       type: DataTypes.ENUM("user", "admin", "guest"),
       allowNull: false,
@@ -81,18 +96,19 @@ User.init(
 export default User;
 
 
-async function createAdmUser() {
+async function createTestUser() {
   try {
-    const novoUser = await User.create({
-      name: "Admin",
-      email: "admin@admin.com",
+    const newtestUser = await User.create({
+      name: "Test",
+      email: "test@email.com",
       passwd: "passwd",
+      cpf: "12918218057",
       access: "admin",
     });
-    console.log(novoUser);
+    console.log(newtestUser);
   } catch (error) {
     // console.log(error);
      }
 }
 
-createAdmUser();
+createTestUser();
