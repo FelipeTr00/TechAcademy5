@@ -24,8 +24,8 @@ export class User extends Model<IUser, IUserAttributes> implements IUser {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public async validatePassword() {
-    return await bcrypt.compare(this.passwd, this.passwd!)
+  public async validatePassword(passwdPlain: string): Promise<boolean> {
+    return await bcrypt.compare(passwdPlain, this.passwd);
   }
 
 }

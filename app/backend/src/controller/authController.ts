@@ -8,28 +8,34 @@ const JWT_SECRET = config.JWT_SECRET || "";
 const JWT_EXPIRES_IN = "30d"; 
 
 export async function login(req: Request, res: Response) {
-    const { email, passwd } = req.body;
+  const { email, passwd } = req.body;
 
-    try {
-        const user = await User.findOne({ where: { email } });
+  try {
+    const user = await User.findOne({ where: { email } });
 
-        if (!user) {
-            return res.status(401).json({ message: "[ERRO] Usuário não encontrado." });
-        }
-
-        const isPasswordValid = await bcrypt.compare(passwd, user.passwd);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: "[ERRO] Usuário ou Senha incorretos" });
-        }
-
-        const token = jwt.sign(
-            { id: user.id, email: user.email }, 
-            JWT_SECRET, 
-            { expiresIn: JWT_EXPIRES_IN }
-        );
-
-        res.json({ token });
-    } catch (error) {
-        res.status(500).json({ message: "[ERRO] Falha de autenticação." });
+    if (!user) {
+      return res.status(401).json({ message: "[ERRO] Usuário não encontrado." });
     }
+
+    const isPasswordValid = await bcrypt.compare(passwd, user.get("passwd"));
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "[ERRO] Usuário ou Senha incorretos" });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.get("id"),
+        email: user.get("email"),
+        access: user.get("access"),
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    );
+
+    return res.status(200).json({ token });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    return res.status(500).json({ message: "[ERRO] Falha de autenticação." });
+  }
 }
+

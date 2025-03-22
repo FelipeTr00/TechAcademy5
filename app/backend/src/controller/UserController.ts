@@ -6,6 +6,7 @@ import {
   deleteUser,
   whoAmI
 } from "../service/UserService";
+import { User } from '../model/UserModel'
 
 export async function getUserById(req: Request, res: Response) {
   const userId = (req as any).user.id;
@@ -27,7 +28,8 @@ export async function getUserById(req: Request, res: Response) {
   } catch (error) {
     res.status(500).json({ message: "Erro ao buscar usuário" });
   }
-}
+};
+
 
 export const getMe = async (req: Request, res: Response) => {
   const userId = (req as any).user.id; 
@@ -48,6 +50,7 @@ export const getMe = async (req: Request, res: Response) => {
   }
 };
 
+
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, passwd1, passwd2, access } = req.body;
 
@@ -64,7 +67,7 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: "[SUCESSO]", user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "[ERRO]" });
+    res.status(500).json({ message: "[ERRO] ao criar usuário." });
   }
 };
 

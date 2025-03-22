@@ -14,12 +14,10 @@ export const insertUser = async ({
   access,
 }: Omit<IUser, "id" | "createdAt" | "updatedAt">) => {
   try {
-    const hashedPassword = await bcrypt.hash(passwd, 10);
-
     const newUser = await User.create({
       name,
       email,
-      passwd: hashedPassword,
+      passwd,
       access,
     });
 
