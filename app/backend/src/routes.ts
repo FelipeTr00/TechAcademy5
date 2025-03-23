@@ -344,7 +344,7 @@ router.patch("/patch-user", authenticateToken, patchUser);
  *       201:
  *         description: Veículo criado com sucesso
  */
-router.post('/create-vehicle', VehicleController.create);
+// router.post('/create-vehicle', VehicleController.create);
 
 
 /**
@@ -370,28 +370,28 @@ router.post('/create-vehicle', VehicleController.create);
  *       200:
  *         description: Lista de veículos filtrada por tipo e ano
  */
-router.post('/get-vehicles', VehicleController.getByFilters);
+// router.post('/get-vehicles', .getByFilters);
 
 
 /**
  * @swagger
  * /get-vehicle:
  *   get:
- *     summary: Buscar um veículo por ID
+ *     summary: Buscar um veículo pelo código Fipe
  *     tags: [Veículos]
  *     parameters:
  *       - in: query
- *         name: id
+ *         name: codigoFipe
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *     responses:
  *       200:
  *         description: Dados do veículo encontrado
  *       404:
  *         description: Veículo não encontrado
  */
-router.get('/get-vehicle', VehicleController.getById);
+// router.get('/get-vehicle', VehicleController.getByCodigoFipe);
 
 /**
  * @swagger
@@ -432,7 +432,7 @@ router.get('/get-vehicle', VehicleController.getById);
  *       404:
  *         description: Veículo não encontrado
  */
-router.put('/update-vehicle', VehicleController.update);
+// router.put('/update-vehicle', VehicleController.update);
 
 /**
  * @swagger
@@ -452,7 +452,7 @@ router.put('/update-vehicle', VehicleController.update);
  *       404:
  *         description: Veículo não encontrado
  */
-router.delete('/delete-vehicle', VehicleController.remove);
+// router.delete('/delete-vehicle', VehicleController.remove);
 
 
 export default router;

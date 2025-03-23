@@ -12,11 +12,13 @@ export const getVehicleByFilters = async (tipo?: string, anoModelo?: number) => 
   
     return await Vehicle.findAll({ where: whereClause });
   };
-
-export const getVehicleById = async (id: number) => {
-  return await Vehicle.findByPk(id);
-};
-
+/*
+  export const getVehicleByCodigoFipe = async (CodigoFipe: string) => {
+    return await Vehicle.findOne({
+      where: { CodigoFipe: CodigoFipe },
+    });
+  };
+*/
 export const updateVehicle = async (id: number, data: any) => {
   const vehicle = await Vehicle.findByPk(id);
   if (!vehicle) return null;
