@@ -1,9 +1,19 @@
+import { useEffect, useState } from "react";
 import { FaHeart, FaMessage } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import logo from "../../assets/navbar.png";
 import styles from "./NavBar.module.css";
 
 function Navbar() {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const storedUserName = localStorage.getItem("userName");
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
+  }, []);
+
   return (
     <nav className={styles.navbar}>
       <Link to={"/"}>
@@ -33,7 +43,11 @@ function Navbar() {
         <div className={styles.verticalLine}></div>
         <ul className={styles.list}>
           <li className={styles.item}>
-            <Link to="/login">Entrar</Link>
+            {userName ? (
+              <span>Olá, {userName}!</span>
+            ) : (
+              <Link to="/login">Entrar</Link>
+            )}
           </li>
           <li className={styles.item}>
             <Link to="/contact">

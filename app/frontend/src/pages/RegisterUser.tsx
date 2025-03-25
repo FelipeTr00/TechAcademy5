@@ -27,7 +27,7 @@ const RegisterUser = () => {
     setError("");
     setSuccess("");
 
-    //VALIDAÇÃO FORM
+    //VALIDAÇÕES DO FORMULÁRIO
     if (
       !nome ||
       !sobrenome ||
@@ -48,6 +48,26 @@ const RegisterUser = () => {
       return;
     }
 
+    if (!email.includes("@") || !email.includes(".com")) {
+      setError("Email inválido");
+      setLoading(false);
+      return;
+    }
+
+    if (senha.length < 12) {
+      setError("Senha tem que ter no minimo 12 caracteres");
+      setLoading(false);
+      return;
+    }
+
+    if (telefone.length < 11) {
+      setError("Telefone tem ser maior que 11 digitos");
+      setLoading(false);
+      return;
+    }
+
+    // FIM DAS VALIDAÇÕES
+
     const dados = {
       nome,
       sobrenome,
@@ -60,7 +80,7 @@ const RegisterUser = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/registro",
+        "http://localhost:8080/api/usuarios",
         dados
       );
       setSuccess("Cadastro realizado com sucesso!");
@@ -75,7 +95,7 @@ const RegisterUser = () => {
       setConfirmarSenha("");
       setTimeout(() => {
         navigate("/login");
-      }, 2000);
+      }, 5000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {

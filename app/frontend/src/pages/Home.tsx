@@ -28,9 +28,11 @@ const Home = () => {
         <img src={principal} alt="xcarros" />{" "}
       </Link>
       <p>Compre e venda de veículos em geral.</p>
-      <div className="button_container">
+      <div>
         {token && userId && (
-          <button onClick={handleLogout}>Sair</button> // Botão de Sair (Logout)
+          <button className={styles.button_container} onClick={handleLogout}>
+            Sair
+          </button> // Botão de Sair (Logout)
         )}
         {(!token || !userId) && (
           <>

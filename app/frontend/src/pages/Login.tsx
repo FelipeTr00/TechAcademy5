@@ -6,8 +6,9 @@ import styles from "./Login.module.css";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [senha, setSenha] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -19,28 +20,36 @@ const Login = () => {
     setError("");
     setSuccess("");
 
-    if (!email || !password) {
-      setError("Preencha todos os campos");
+    if (!email || !senha) {
       setLoading(false);
-      return;
+      return setError("Preencha todos os campos");
     }
 
     try {
-      const { data } = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        "http://localhost:8080/api/usuarios/login",
+        {
+          email,
+          senha,
+        }
+      );
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userId", data.userId);
-      localStorage.setItem("userName", data.userName);
-
+      // ARMAZENA OS DADOS LOCALSTORAGE
+      if (rememberMe || !rememberMe) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("userName", data.userName);
+      } else {
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("userId", data.userId);
+        sessionStorage.setItem("userName", data.userName);
+      }
       setSuccess("Login realizado com sucesso!");
       setEmail("");
-      setPassword("");
+      setSenha("");
       setLoading(false);
 
-      navigate(`/home`);
+      navigate(`/home/:id/:name`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -75,8 +84,8 @@ const Login = () => {
           <input
             type="password"
             placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
           />
         </div>
         <div className={styles.recallForget}>

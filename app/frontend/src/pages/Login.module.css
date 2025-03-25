@@ -48,6 +48,8 @@
 .login_container form input:focus {
   outline: none;
   border: 1px solid #ff8e3c;
+  box-shadow: 0 0 5px #ff8e3c;
+  background-color: #fff;
 }
 
 .login_container form input::placeholder {
