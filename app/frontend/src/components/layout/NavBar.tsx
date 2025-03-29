@@ -1,18 +1,11 @@
-import { useEffect, useState } from "react";
 import { FaHeart, FaMessage } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import logo from "../../assets/navbar.png";
+import { useAuth } from "../../contexts/AuthContext";
 import styles from "./NavBar.module.css";
 
 function Navbar() {
-  const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    const storedUserName = localStorage.getItem("userName");
-    if (storedUserName) {
-      setUserName(storedUserName);
-    }
-  }, []);
+  const { token, logout, userName } = useAuth();
 
   return (
     <nav className={styles.navbar}>
@@ -42,23 +35,32 @@ function Navbar() {
       <div className={styles.rightGroup}>
         <div className={styles.verticalLine}></div>
         <ul className={styles.list}>
-          <li className={styles.item}>
-            {userName ? (
-              <span>Olá, {userName}!</span>
-            ) : (
-              <Link to="/login">Entrar</Link>
-            )}
-          </li>
-          <li className={styles.item}>
-            <Link to="/contact">
-              <FaMessage />
-            </Link>
-          </li>
-          <li className={styles.item}>
-            <Link to="/favorites">
-              <FaHeart />
-            </Link>
-          </li>
+          {token ? (
+            <>
+              <li className={styles.item}>Olá, {userName}!</li>
+              <li className={styles.item}>
+                <button onClick={logout} className={styles.logoutButton}>
+                  Sair
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className={styles.item}>
+                <Link to="/login">Entrar</Link>
+              </li>
+              <li className={styles.item}>
+                <Link to="/contact">
+                  <FaMessage />
+                </Link>
+              </li>
+              <li className={styles.item}>
+                <Link to="/favorites">
+                  <FaHeart />
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

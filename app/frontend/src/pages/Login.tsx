@@ -1,65 +1,49 @@
-import axios from "axios";
 import { useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { getErrorMessage } from "../components/utils/errors";
+import { useAuth } from "../contexts/AuthContext";
+import api from "../services/api";
 import styles from "./Login.module.css";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setSuccess("");
 
     if (!email || !senha) {
+      setError("Preencha todos os campos");
       setLoading(false);
-      return setError("Preencha todos os campos");
+      return;
     }
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:8080/api/usuarios/login",
-        {
-          email,
-          senha,
-        }
-      );
+      const response = await api.post("/usuarios/login", {
+        email,
+        senha,
+      });
 
-      // ARMAZENA OS DADOS LOCALSTORAGE
-      if (rememberMe || !rememberMe) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
-        localStorage.setItem("userName", data.userName);
-      } else {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("userId", data.userId);
-        sessionStorage.setItem("userName", data.userName);
-      }
-      setSuccess("Login realizado com sucesso!");
+      const { userName, userId } = response.data;
+
+      login("token", userId.toString(), userName, rememberMe);
+
       setEmail("");
       setSenha("");
       setLoading(false);
 
-      navigate(`/home/:id/:name`);
+      navigate(`/home/${userId}`);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          setError(error.response.data.message || "Erro ao realizar login");
-        } else {
-          setError("Erro de conexão");
-        }
-      } else {
-        setError("Erro inesperado");
-      }
+      setError(getErrorMessage(error));
+    } finally {
       setLoading(false);
     }
   };
@@ -68,12 +52,13 @@ const Login = () => {
     <div className={styles.login_container}>
       <form onSubmit={handleSubmit}>
         {error && <p className={styles.error}>{error}</p>}
-        {success && <p className={styles.success}>{success}</p>}
+
         <h2>Digite o seu e-mail e senha</h2>
         <div className={styles.input_container}>
           <FaUser className={styles.icon} />
           <input
             type="text"
+            name="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +69,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Senha"
+            name="senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />

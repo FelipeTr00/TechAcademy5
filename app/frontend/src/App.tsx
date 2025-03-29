@@ -1,7 +1,8 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/NavBar";
+import PrivateRoute from "./components/utils/PrivateRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import RegisterUser from "./pages/RegisterUser";
@@ -12,11 +13,21 @@ function App() {
       <Navbar />
       <div className="container">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home/:id/:name" element={<Home />} />
+          {/* Rotas Públicas */}
           <Route path="/login" element={<Login />} />
-          <Route path="/login/:id" element={<Login />} />
+          <Route path="/" element={<Home />} />
           <Route path="/registerUser" element={<RegisterUser />} />
+
+          {/* Rotas Privadas */}
+          <Route
+            element={
+              <PrivateRoute>
+                <Outlet />
+              </PrivateRoute>
+            }
+          >
+            <Route path="/home/:userId" element={<Home />} />
+          </Route>
         </Routes>
       </div>
       <Footer />

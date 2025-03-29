@@ -1,23 +1,17 @@
-import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import principal from "../assets/xcarrosPrincipal.png";
 import LinkButton from "../components/layout/LinkButton";
+import { useAuth } from "../contexts/AuthContext";
 import styles from "./Home.module.css";
 
-const Home = () => {
-  const userId = localStorage.getItem("userId");
-  const userName = localStorage.getItem("userName");
-  const token = localStorage.getItem("token");
-  const navigate = useNavigate();
+interface HomeProps {
+  showPublicContent?: boolean;
+}
 
-  useEffect(() => {}, [navigate, token, userId]);
+const Home = ({ showPublicContent = false }: HomeProps) => {
+  const { token, logout, userName, userId } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-    navigate("/");
-  };
+  const isPublic = showPublicContent || !token;
 
   return (
     <section className={styles.home_container}>
@@ -25,28 +19,24 @@ const Home = () => {
         <span>WEB-CARROS</span>
       </h1>
       <Link to="/">
-        <img src={principal} alt="xcarros" />{" "}
+        <img src={principal} alt="xcarros" />
       </Link>
       <p>Compre e venda de veículos em geral.</p>
-      <div>
-        {token && userId && (
-          <button className={styles.button_container} onClick={handleLogout}>
+      {/* Conteúdo público */}
+      {isPublic ? (
+        <div>
+          <LinkButton to="/login">Fazer Login</LinkButton>
+          <LinkButton to="/registerUser">Cadastro</LinkButton>
+        </div>
+      ) : (
+        /* Conteúdo privado */
+        <div>
+          <button className={styles.button_container} onClick={logout}>
             Sair
-          </button> // Botão de Sair (Logout)
-        )}
-        {(!token || !userId) && (
-          <>
-            <LinkButton to="/login">Fazer Login</LinkButton>
-            <LinkButton to="/registerUser">Cadastro</LinkButton>
-          </>
-        )}
-      </div>
-
-      {token && userId && (
-        <>
-          <p>Seja bem vindo - {userName}! </p>
-          <p>Seu Id é: {userId}</p>
-        </>
+          </button>
+          <p>Seja bem-vindo - {userName}!</p>
+          <p>Seu ID é: {userId}</p>
+        </div>
       )}
     </section>
   );

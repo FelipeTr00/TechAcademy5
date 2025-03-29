@@ -67,6 +67,22 @@
   transform: scale(1.1);
 }
 
+.logoutButton {
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.logoutButton:hover {
+  color: #ff8e3c;
+  background-color: #0d0d0d;
+}
+
 @media (max-width: 768px) {
   .centerGroup {
     position: static;
