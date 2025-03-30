@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:5000";
+const PORT = process.env.API_PORT || ""
+const SERVER_URL = process.env.SERVER_URL+PORT || "http://localhost:5000";
 
 const swaggerOptions = {
   definition: {

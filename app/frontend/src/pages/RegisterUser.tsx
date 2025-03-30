@@ -53,6 +53,7 @@ const RegisterUser = () => {
       setError("As senhas não coincidem");
       return false;
     }
+
     if (!email.includes("@") || !email.includes(".com")) {
       setError("Email inválido.");
       return false;
@@ -67,6 +68,7 @@ const RegisterUser = () => {
       setError("O telefone deve ter no mínimo 11 dígitos.");
       return false;
     }
+
     if (cpf.length < 11) {
       setError("O CPF deve ter no mínimo 11 dígitos.");
       return false;
@@ -86,11 +88,19 @@ const RegisterUser = () => {
       return;
     }
 
+    const payload = {
+      name: `${formData.nome.trim()} ${formData.sobrenome.trim()}`,
+      email: formData.email,
+      passwd: formData.senha,
+      passwdCheck: formData.confirmarSenha,
+      cpf: formData.cpf,
+      access: "user",
+    };
+
     try {
-      await api.post("/usuarios", formData);
+      await api.post("/new-user", payload);
       setSuccess("Cadastro realizado com sucesso!");
 
-      //LIMPAR CAMPO APOS SUCESSO
       setFormData({
         nome: "",
         sobrenome: "",

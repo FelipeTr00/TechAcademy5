@@ -99,7 +99,7 @@ export default User;
 async function createTestUser() {
   try {
     const newtestUser = await User.create({
-      name: "Test",
+      name: "Teste Ok",
       email: "test@email.com",
       passwd: "passwd",
       cpf: "12918218057",

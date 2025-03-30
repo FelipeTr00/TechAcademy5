@@ -43,7 +43,7 @@ const router = Router();
  *                 example: "passwd"
  *     responses:
  *       200:
- *         description: Login bem-sucedido, retorna um token JWT.
+ *         description: Login bem-sucedido, retorna um token JWT e dados do usuário.
  *         content:
  *           application/json:
  *             schema:
@@ -52,6 +52,12 @@ const router = Router();
  *                 token:
  *                   type: string
  *                   example: "eyJhbGciOiJIUzI1NiIs..."
+ *                 userId:
+ *                   type: integer
+ *                   example: 1
+ *                 userName:
+ *                   type: string
+ *                   example: "Nome Sobrenome"
  *       401:
  *         description: Credenciais inválidas
  */
@@ -152,10 +158,10 @@ router.get("/get-user", authenticateToken, getMe);
  *               email:
  *                 type: string
  *                 example: "test2@email.com"
- *               passwd1:
+ *               passwd:
  *                 type: string
  *                 example: "senha123"
- *               passwd2:
+ *               passwdCheck:
  *                 type: string
  *                 example: "senha123"
  *               cpf:

@@ -49,24 +49,24 @@ export const getMe = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({
-        message: error instanceof Error ? error.message : "Erro desconhecido.",
+        message: error instanceof Error ? error.message : "Erro desconhecido1.",
       });
   }
 };
 
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, passwd1, passwd2, cpf, access } = req.body;
+  const { name, email, passwd, passwdCheck, cpf, access } = req.body;
 
-  if (!name || !email || !passwd1 || !passwd2 || !cpf || !access) {
+  if (!name || !email || !passwd || !passwdCheck || !cpf || !access) {
     return res.status(400).json({ message: "Preencha todos os campos." });
   }
 
-  if (passwd1 !== passwd2) {
+  if (passwd !== passwdCheck) {
     return res.status(400).json({ message: "Senhas diferentes." });
   }
 
-  const passwdLevel = getPasswordStrength(passwd1);
+  const passwdLevel = getPasswordStrength(passwd);
   if (passwdLevel === "fraca") {
     return res.status(400).json({ message: "Senha muito fraca. Use letras, números e símbolos." });
   }
@@ -76,7 +76,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const newUser = await insertUser({ name, email, passwd: passwd1, cpf, access });
+    const newUser = await insertUser({ name, email, passwd: passwd, cpf, access });
     res.status(201).json({ message: "[SUCESSO]", user: newUser });
   } catch (error) {
     res.status(500).json({ message: "[ERRO] ao criar usuário." });
@@ -98,7 +98,7 @@ export const updateUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "[SUCESSO]", user: updatedUser });
   } catch (error) {
     const errMessage =
-      error instanceof Error ? error.message : "Erro desconhecido.";
+      error instanceof Error ? error.message : "Erro desconhecido2.";
     res.status(500).json({ message: errMessage });
   }
 };
@@ -117,7 +117,7 @@ export const patchUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "[SUCESSO]", user: updatedUser });
   } catch (error) {
     res.status(500).json({
-      message: error instanceof Error ? error.message : "Erro desconhecido.",
+      message: error instanceof Error ? error.message : "Erro desconhecido3.",
     });
   }
 };
@@ -135,7 +135,7 @@ export const destroyUser = async (req: Request, res: Response) => {
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
-      message: error instanceof Error ? error.message : "Erro desconhecido.",
+      message: error instanceof Error ? error.message : "Erro desconhecido4.",
     });
   }
 };

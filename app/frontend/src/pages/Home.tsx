@@ -34,7 +34,7 @@ const Home = ({ showPublicContent = false }: HomeProps) => {
           <button className={styles.button_container} onClick={logout}>
             Sair
           </button>
-          <p>Seja bem-vindo - {userName}!</p>
+          <p>Seja bem-vindo, {userName}!</p>
           <p>Seu ID é: {userId}</p>
         </div>
       )}

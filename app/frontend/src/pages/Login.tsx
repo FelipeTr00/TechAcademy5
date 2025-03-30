@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [passwd, setSenha] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,26 +20,20 @@ const Login = () => {
     setLoading(true);
     setError("");
 
-    if (!email || !senha) {
+    if (!email || !passwd) {
       setError("Preencha todos os campos");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await api.post("/usuarios/login", {
-        email,
-        senha,
-      });
+      const response = await api.post("/login", { email, passwd });
+      const { token, userId, userName } = response.data;
 
-      const { userName, userId } = response.data;
-
-      login("token", userId.toString(), userName, rememberMe);
+      login(token, userId.toString(), userName, rememberMe);
 
       setEmail("");
       setSenha("");
-      setLoading(false);
-
       navigate(`/home/${userId}`);
     } catch (error) {
       setError(getErrorMessage(error));
@@ -70,7 +64,7 @@ const Login = () => {
             type="password"
             placeholder="Senha"
             name="senha"
-            value={senha}
+            value={passwd}
             onChange={(e) => setSenha(e.target.value)}
           />
         </div>
