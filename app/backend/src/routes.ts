@@ -7,7 +7,9 @@ import { getUserById,
          patchUser,
          getMe } from "./controller/UserController";
 import { authenticateToken } from "./middleware/authMiddleware";
-import * as VehicleController from './controller/VehicleController';
+import { createVehicle,
+         getByFilters,
+         getByFipeCode } from './controller/VehicleController';
 
 const router = Router();
 
@@ -22,6 +24,7 @@ const router = Router();
  *     description: Endpoints para operações de veículos.
  */
 
+// USER
 /**
  * @swagger
  * /login:
@@ -181,7 +184,6 @@ router.get("/get-user", authenticateToken, getMe);
  */
 router.post("/new-user", createUser);
 
-
 /**
  * @swagger
  * /update-user:
@@ -251,7 +253,6 @@ router.post("/new-user", createUser);
  */
 router.put("/update-user", authenticateToken, updateUser);
 
-
 /**
  * @swagger
  * /delete-user:
@@ -279,7 +280,6 @@ router.put("/update-user", authenticateToken, updateUser);
  *         description: "Erro ao excluir usuário."
  */
 router.delete("/delete-user", authenticateToken, destroyUser);
-
 
 /**
  * @swagger
@@ -312,6 +312,7 @@ router.delete("/delete-user", authenticateToken, destroyUser);
  */
 router.patch("/patch-user", authenticateToken, patchUser);
 
+// VEHICLE
 /**
  * @swagger
  * /create-vehicle:
@@ -350,7 +351,7 @@ router.patch("/patch-user", authenticateToken, patchUser);
  *       201:
  *         description: Veículo criado com sucesso
  */
-// router.post('/create-vehicle', VehicleController.create);
+router.post('/create-vehicle', createVehicle);
 
 
 /**
@@ -366,38 +367,67 @@ router.patch("/patch-user", authenticateToken, patchUser);
  *           schema:
  *             type: object
  *             properties:
- *               tipo:
+ *               Tipo:
  *                 type: string
  *                 example: carros
- *               ano:
+ *               anoModelo:
  *                 type: integer
  *                 example: 2020
  *     responses:
  *       200:
  *         description: Lista de veículos filtrada por tipo e ano
  */
-// router.post('/get-vehicles', .getByFilters);
+router.post('/get-vehicles', getByFilters);
 
 
 /**
  * @swagger
  * /get-vehicle:
  *   get:
- *     summary: Buscar um veículo pelo código Fipe
+ *     summary: Get vehicle by Fipe code
  *     tags: [Veículos]
  *     parameters:
  *       - in: query
- *         name: codigoFipe
+ *         name: CodigoFipe
  *         required: true
+ *         description: Fipe code of the vehicle (e.g., 031056-5)
  *         schema:
  *           type: string
+ *           example: "031056-5"
  *     responses:
  *       200:
- *         description: Dados do veículo encontrado
+ *         description: Vehicle found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 CodigoFipe:
+ *                   type: string
+ *                 Tipo:
+ *                   type: string
+ *                 Marca:
+ *                   type: string
+ *                 Modelo:
+ *                   type: string
+ *                 Combustivel:
+ *                   type: string
+ *                 anoModelo:
+ *                   type: integer
+ *                 Valor:
+ *                   type: string
+ *                 ValorFipe:
+ *                   type: number
+ *       400:
+ *         description: Missing or invalid Fipe code
  *       404:
- *         description: Veículo não encontrado
+ *         description: Vehicle not found
+ *       500:
+ *         description: Internal server error
  */
-// router.get('/get-vehicle', VehicleController.getByCodigoFipe);
+router.get('/get-vehicle', getByFipeCode);
 
 /**
  * @swagger

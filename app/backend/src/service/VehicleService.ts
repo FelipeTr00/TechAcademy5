@@ -4,14 +4,28 @@ export const createVehicle = async (data: any) => {
   return await Vehicle.create(data);
 };
 
-export const getVehicleByFilters = async (tipo?: string, anoModelo?: number) => {
-    const whereClause: any = {};
-  
-    if (tipo) whereClause.Tipo = tipo;
-    if (anoModelo) whereClause.anoModelo = anoModelo;
-  
-    return await Vehicle.findAll({ where: whereClause });
-  };
+type VehicleFilters = {
+  CodigoFipe?: string;
+  Tipo?: string;
+  Marca?: string;
+  Modelo?: string;
+  Combustivel?: string;
+  anoModelo?: number;
+  Valor?: string;
+  ValorFipe?: string;
+};
+
+export const getVehicleByFilters = async (filters: VehicleFilters) => {
+  const whereClause: any = {};
+
+  for (const key in filters) {
+    if (filters[key as keyof VehicleFilters] !== undefined) {
+      whereClause[key] = filters[key as keyof VehicleFilters];
+    }
+  }
+
+  return await Vehicle.findAll({ where: whereClause });
+};
 /*
   export const getVehicleByCodigoFipe = async (CodigoFipe: string) => {
     return await Vehicle.findOne({

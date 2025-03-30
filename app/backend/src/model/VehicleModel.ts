@@ -42,3 +42,6 @@ Vehicle.init({
   tableName: 'fipe',
   timestamps: false,
 });
+
+
+

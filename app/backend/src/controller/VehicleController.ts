@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import * as VehicleService from '../service/VehicleService';
+import { Vehicle } from '../model/VehicleModel';
 
-export const create = async (req: Request, res: Response) => {
+export const createVehicle = async (req: Request, res: Response) => {
   try {
     const vehicle = await VehicleService.createVehicle(req.body);
     res.status(201).json(vehicle);
@@ -11,19 +12,39 @@ export const create = async (req: Request, res: Response) => {
 };
 
 export const getByFilters = async (req: Request, res: Response) => {
-    const { tipo, ano } = req.body;
-  
-    try {
-      const vehicles = await VehicleService.getVehicleByFilters(
-        tipo?.toString(),
-        ano ? Number(ano) : undefined
-      );
-  
-      res.json(vehicles);
-    } catch (err) {
-      res.status(500).json({ error: 'Erro ao buscar veículos' });
+  try {
+    const filters = req.body;
+
+    const vehicles = await VehicleService.getVehicleByFilters(filters);
+
+    res.json(vehicles);
+  } catch (err) {
+    res.status(500).json({ error: 'Error to fetch vehicles.' });
+  }
+};
+
+
+export const getByFipeCode = async (req: Request, res: Response) => {
+  try {
+    const codigoFipe = req.query.CodigoFipe as string;
+
+    if (!codigoFipe) {
+      return res.status(400).json({ error: 'Fipe code is required' });
     }
-  };
+
+    const vehicle = await Vehicle.findAll({ where: { CodigoFipe: codigoFipe } });
+
+    return vehicle
+      ? res.json(vehicle)
+      : res.status(404).json({ error: 'Vehicle not found' });
+  } catch (err) {
+    console.error('[ERROR] Failed to fetch vehicle by Fipe code:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
 
   /*
 port const getByCodigoFipe = async (req: Request, res: Response) => {
