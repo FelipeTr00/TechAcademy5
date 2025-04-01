@@ -37,7 +37,7 @@ function Navbar() {
         <ul className={styles.list}>
           {token ? (
             <>
-              <li className={styles.item}>Olá, {userName}!</li>
+              <li className={styles.nome}>Olá, {userName}!</li>
               <li className={styles.item}>
                 <button onClick={logout} className={styles.logoutButton}>
                   Sair

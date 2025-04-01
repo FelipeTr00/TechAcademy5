@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/NavBar";
 import PrivateRoute from "./components/utils/PrivateRoute";
+import EditUser from "./pages/EditUser";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import RegisterUser from "./pages/RegisterUser";
@@ -27,6 +28,7 @@ function App() {
             }
           >
             <Route path="/home/:userId" element={<Home />} />
+            <Route path="/editUser/:userId" element={<EditUser />} />
           </Route>
         </Routes>
       </div>

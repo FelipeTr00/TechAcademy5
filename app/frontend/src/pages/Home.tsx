@@ -30,10 +30,14 @@ const Home = ({ showPublicContent = false }: HomeProps) => {
         </div>
       ) : (
         /* Conteúdo privado */
-        <div>
+
+        <div className={styles.area_auth}>
+          <LinkButton to={`/editUser/${userId}`}>Editar Usuário</LinkButton>
+
           <button className={styles.button_container} onClick={logout}>
             Sair
           </button>
+
           <p>Seja bem-vindo, {userName}!</p>
           <p>Seu ID é: {userId}</p>
         </div>
