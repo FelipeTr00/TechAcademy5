@@ -17,5 +17,5 @@ app.use(router);
 
 app.listen(PORT, () => {
   console.log(`Servidor: http://localhost:${PORT}/`);
-  console.log(`Swagger: http://localhost:${PORT}/docs`);
+  console.log(`Swagger: http://localhost:${PORT}/api-docs`);
 });

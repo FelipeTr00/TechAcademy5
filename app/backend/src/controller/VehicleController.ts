@@ -44,27 +44,7 @@ export const getByFipeCode = async (req: Request, res: Response) => {
 };
 
 
-
-
-  /*
-port const getByCodigoFipe = async (req: Request, res: Response) => {
-  const CodigoFipe = req.body.CodigoFipe; // ou req.query.codigoFipe / req.params.codigoFipe
-
-  if (!CodigoFipe) {
-    return res.status(400).json({ error: 'Código Fipe não informado' });
-  }
-
-  const vehicle = await VehicleService.getVehicleByCodigoFipe(CodigoFipe);
-
-  if (vehicle) {
-    res.json(vehicle);
-  } else {
-    res.status(404).json({ error: 'Veículo não encontrado' });
-  }
-};
-*/
-
-export const update = async (req: Request, res: Response) => {
+export const updateVehicle = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const updated = await VehicleService.updateVehicle(id, req.body);
   if (updated) {
@@ -74,7 +54,7 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const destroyVehicle = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const deleted = await VehicleService.deleteVehicle(id);
   if (deleted) {

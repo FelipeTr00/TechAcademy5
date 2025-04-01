@@ -8,8 +8,10 @@ import { getUserById,
          getMe } from "./controller/UserController";
 import { authenticateToken } from "./middleware/authMiddleware";
 import { createVehicle,
+         destroyVehicle,
          getByFilters,
-         getByFipeCode } from './controller/VehicleController';
+         getByFipeCode,
+         updateVehicle } from './controller/VehicleController';
 
 const router = Router();
 
@@ -329,24 +331,32 @@ router.patch("/patch-user", authenticateToken, patchUser);
  *               CodigoFipe:
  *                 type: string
  *                 description: Código FIPE do veículo
+ *                 example: "811013-1"
  *               Tipo:
  *                 type: string
  *                 description: Tipo do veículo (carro, moto, etc.)
+ *                 example: "motos"
  *               Marca:
  *                 type: string
+ *                 example: "HONDA"
  *               Modelo:
  *                 type: string
+ *                 example: "CBR 600 F"
  *               Combustivel:
  *                 type: string
+ *                 example: "Gasolina"
  *               anoModelo:
  *                 type: integer
  *                 description: Ano do modelo
+ *                 example: 1998
  *               Valor:
  *                 type: string
  *                 description: Valor do veículo (string formatada)
+ *                 example: "R$ 20.787,00"
  *               ValorFipe:
  *                 type: number
  *                 format: float
+ *                 example: 20787.00
  *     responses:
  *       201:
  *         description: Veículo criado com sucesso
@@ -431,12 +441,12 @@ router.get('/get-vehicle', getByFipeCode);
 
 /**
  * @swagger
- * /update-vehicle:
+ * /update-vehicle/{id}:
  *   put:
  *     summary: Atualizar um veículo por ID
  *     tags: [Veículos]
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: id
  *         required: true
  *         schema:
@@ -468,16 +478,16 @@ router.get('/get-vehicle', getByFipeCode);
  *       404:
  *         description: Veículo não encontrado
  */
-// router.put('/update-vehicle', VehicleController.update);
+router.put('/update-vehicle/:id', updateVehicle);
 
 /**
  * @swagger
- * /delete-vehicle:
+ * /delete-vehicle/{id}:
  *   delete:
  *     summary: Remover um veículo por ID
  *     tags: [Veículos]
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: id
  *         required: true
  *         schema:
@@ -488,7 +498,7 @@ router.get('/get-vehicle', getByFipeCode);
  *       404:
  *         description: Veículo não encontrado
  */
-// router.delete('/delete-vehicle', VehicleController.remove);
+router.delete('/delete-vehicle/:id', destroyVehicle);
 
 
 export default router;

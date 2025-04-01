@@ -26,13 +26,7 @@ export const getVehicleByFilters = async (filters: VehicleFilters) => {
 
   return await Vehicle.findAll({ where: whereClause });
 };
-/*
-  export const getVehicleByCodigoFipe = async (CodigoFipe: string) => {
-    return await Vehicle.findOne({
-      where: { CodigoFipe: CodigoFipe },
-    });
-  };
-*/
+
 export const updateVehicle = async (id: number, data: any) => {
   const vehicle = await Vehicle.findByPk(id);
   if (!vehicle) return null;
