@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-const Posts = () => {
-  const [userId, isAuthenticated] = useAuth();
+const Buy = () => {
+  const { userId, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -11,6 +11,12 @@ const Posts = () => {
       navigate("/login");
     }
   }, [isAuthenticated, navigate]);
+
+  return (
+    <div>
+      <p>Página de Compra</p>
+    </div>
+  );
 };
 
-export default Posts;
+export default Buy;

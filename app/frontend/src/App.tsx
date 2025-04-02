@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/NavBar";
 import PrivateRoute from "./components/utils/PrivateRoute";
+import Buy from "./pages/Buy";
 import EditUser from "./pages/EditUser";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
           <Route path="/registerUser" element={<RegisterUser />} />
+          <Route path="/buy" element={<Buy />} />
 
           {/* Rotas Privadas */}
           <Route
@@ -29,6 +31,7 @@ function App() {
           >
             <Route path="/home/:userId" element={<Home />} />
             <Route path="/editUser/:userId" element={<EditUser />} />
+            <Route path="/buy/:userId" element={<Buy />} />
           </Route>
         </Routes>
       </div>
