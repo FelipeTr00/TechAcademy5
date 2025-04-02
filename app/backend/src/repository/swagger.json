@@ -1,0 +1,161 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "TechAcademy API",
+      "version": "1.0.0",
+      "description": "API para autenticação, usuários e veículos"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080"
+      }
+    ],
+    "tags": [
+      { "name": "Login", "description": "Endpoint para autenticação de usuários" },
+      { "name": "Usuário", "description": "Endpoints para operações de usuários autenticados" },
+      { "name": "Veículos", "description": "Endpoints para operações de veículos" }
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "summary": "Autentica um usuário e retorna um token JWT",
+          "tags": ["Login"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string", "example": "test@email.com" },
+                    "passwd": { "type": "string", "example": "passwd" }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login bem-sucedido, retorna um token JWT"
+            },
+            "401": {
+              "description": "Credenciais inválidas"
+            }
+          }
+        }
+      },
+      "/create-vehicle": {
+        "post": {
+          "summary": "Criar um novo veículo",
+          "tags": ["Veículos"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CodigoFipe": { "type": "string", "example": "811013-1" },
+                    "Tipo": { "type": "string", "example": "motos" },
+                    "Marca": { "type": "string", "example": "HONDA" },
+                    "Modelo": { "type": "string", "example": "CBR 600 F" },
+                    "Combustivel": { "type": "string", "example": "Gasolina" },
+                    "anoModelo": { "type": "integer", "example": 1998 },
+                    "Valor": { "type": "string", "example": "R$ 20.787,00" },
+                    "ValorFipe": { "type": "number", "example": 20787.0 }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Veículo criado com sucesso"
+            }
+          }
+        }
+      },
+      "/get-vehicle": {
+        "get": {
+          "summary": "Buscar um veículo pelo código FIPE",
+          "tags": ["Veículos"],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "CodigoFipe",
+              "required": true,
+              "schema": { "type": "string", "example": "031056-5" },
+              "description": "Código FIPE do veículo"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Veículo encontrado"
+            },
+            "404": {
+              "description": "Veículo não encontrado"
+            },
+            "400": {
+              "description": "Código FIPE inválido"
+            }
+          }
+        }
+      },
+      "/update-vehicle/{id}": {
+        "put": {
+          "summary": "Atualizar um veículo por ID",
+          "tags": ["Veículos"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": { "type": "integer" }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Tipo": { "type": "string" },
+                    "Marca": { "type": "string" },
+                    "Modelo": { "type": "string" },
+                    "Combustivel": { "type": "string" },
+                    "anoModelo": { "type": "integer" },
+                    "Valor": { "type": "string" },
+                    "ValorFipe": { "type": "number" }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Veículo atualizado com sucesso" },
+            "404": { "description": "Veículo não encontrado" }
+          }
+        }
+      },
+      "/delete-vehicle/{id}": {
+        "delete": {
+          "summary": "Remover um veículo por ID",
+          "tags": ["Veículos"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": { "type": "integer" }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Veículo removido com sucesso" },
+            "404": { "description": "Veículo não encontrado" }
+          }
+        }
+      }
+    }
+  }
+  
