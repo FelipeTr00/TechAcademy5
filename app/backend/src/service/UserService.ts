@@ -47,10 +47,6 @@ export const alterUser = async (
       throw new Error("Usuário ou senha inválidos.");
     }
 
-    if (updateData.passwd) {
-      updateData.passwd = await bcrypt.hash(updateData.passwd, 10);
-    }
-
     await user.update(updateData);
     return user;
   } catch (error) {

@@ -31,7 +31,17 @@ const EditUser = () => {
       setLoading(true);
       try {
         const response = await api.get(`/get-user/${userId}`);
-        setFormData(response.data);
+        const { name, email, cpf } = response.data;
+        const [nome, ...rest] = name.split(" ");
+        const sobrenome = rest.join(" ");
+
+        setFormData((prev) => ({
+          ...prev,
+          nome,
+          sobrenome,
+          email,
+          cpf,
+        }));
       } catch (error) {
         setError(getErrorMessage(error));
       } finally {
@@ -59,10 +69,23 @@ const EditUser = () => {
     setError(null);
     setSuccess(null);
 
+    if (formData.senha !== formData.confirmarSenha) {
+      setError("As senhas não coincidem.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await api.put(`/update-user`, formData);
+      const updatePayload = {
+        name: `${formData.nome} ${formData.sobrenome}`,
+        passwd: formData.senha || undefined,
+        cpf: formData.cpf,
+        access: "user",
+      };
+
+      await api.put(`/update-user`, updatePayload);
       setSuccess("Usuário atualizado com sucesso!");
-      setTimeout(() => navigate(`/home/${userId}`), 5000);
+      setTimeout(() => navigate(`/home/${userId}`), 3000);
     } catch (error) {
       setError(getErrorMessage(error));
     } finally {
