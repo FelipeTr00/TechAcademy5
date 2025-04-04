@@ -1,9 +1,7 @@
 import axios from "axios";
 
-const PORT: number = 8080;
-
 const api = axios.create({
-  baseURL: `http://localhost:${PORT}`,
+  baseURL: `http://localhost:8080/`,
 });
 
 api.interceptors.request.use((config) => {

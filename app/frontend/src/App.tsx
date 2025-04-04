@@ -8,6 +8,8 @@ import EditUser from "./pages/EditUser";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import RegisterUser from "./pages/RegisterUser";
+import Sell from "./pages/Sell";
+import UserPage from "./pages/UserPage";
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
           <Route path="/registerUser" element={<RegisterUser />} />
+          <Route path="/sell" element={<Sell />} />
           <Route path="/buy" element={<Buy />} />
 
           {/* Rotas Privadas */}
@@ -31,7 +34,7 @@ function App() {
           >
             <Route path="/home/:userId" element={<Home />} />
             <Route path="/editUser/:userId" element={<EditUser />} />
-            <Route path="/buy/:userId" element={<Buy />} />
+            <Route path="/user/:userId" element={<UserPage />} />
           </Route>
         </Routes>
       </div>
