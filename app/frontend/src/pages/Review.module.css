@@ -30,7 +30,7 @@
   
   .reviewForm input:focus,
   .reviewForm textarea:focus {
-    border-color: #1e90ff;
+    border-color: #ff8e3c;
     outline: none;
     box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
   }
@@ -42,7 +42,7 @@
   
   .reviewForm button {
     padding: 14px;
-    background-color: #1e90ff;
+    background-color: #ff8e3c;
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -50,10 +50,27 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 20%;
   }
   
   .reviewForm button:hover {
-    background-color: #0073e6;
+    background-color: #e77828;
+  }
+
+  .formFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    gap: 16px;
+  }
+  
+  .ratingInput {
+    width: 100%;
+    max-width: 80px;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
   }
   
   .timeline {
@@ -67,7 +84,7 @@
     padding: 16px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border-left: 4px solid #0d6efd;
+    border-left: 4px solid #ff8e3c;
   }
   
   .card h3 {
@@ -99,5 +116,34 @@
     border-radius: 8px;
     font-size: 14px;
     color: #333;
+  }
+
+  .sectionTitle {
+    margin-top: 48px;
+    margin-bottom: 16px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .vehicleSelectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    margin-bottom: 16px;
+  }
+  
+  .vehicleSelectors select {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
   }
   
