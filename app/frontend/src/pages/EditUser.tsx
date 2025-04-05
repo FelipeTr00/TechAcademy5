@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../components/utils/errors";
+import { calcularForcaSenha } from "../components/utils/formUtils";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../services/api";
 
 const EditUser = () => {
+  const [forcaSenha, setForcaSenha] = useState(0);
   const { token, userId } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -60,6 +62,9 @@ const EditUser = () => {
           ? value.replace(/\D/g, "")
           : value,
     });
+    if (name === "senha") {
+      setForcaSenha(calcularForcaSenha(value));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -146,19 +151,62 @@ const EditUser = () => {
                 ? "Confirmar Senha"
                 : field.charAt(0).toUpperCase() + field.slice(1)}
             </label>
-            <input
-              type={field.includes("senha") ? "password" : "text"}
-              id={field}
-              name={field}
-              value={formData[field as keyof typeof formData]}
-              onChange={handleChange}
-              disabled={field === "email"}
-              placeholder={
-                field === "email" ? "*Não é possível editar o email" : ""
-              }
-              required={field !== "email"}
-              className="w-72 md:w-[350px] h-9 px-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-            />
+            <>
+              <input
+                type={field.includes("senha") ? "password" : "text"}
+                id={field}
+                name={field}
+                value={formData[field as keyof typeof formData]}
+                onChange={handleChange}
+                disabled={field === "email"}
+                placeholder={
+                  field === "email" ? "*Não é possível editar o email" : ""
+                }
+                required={field !== "email"}
+                className="w-72 md:w-[350px] h-9 px-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+              />
+
+              {field === "senha" && (
+                <div className="w-72 md:w-[350px] text-xs text-left mt-1">
+                  <p>
+                    Força da Senha:{" "}
+                    <span
+                      className={`font-semibold ${
+                        forcaSenha < 3
+                          ? "text-red-600"
+                          : forcaSenha === 3
+                          ? "text-yellow-600"
+                          : forcaSenha === 4
+                          ? "text-green-600"
+                          : "text-green-800"
+                      }`}
+                    >
+                      {
+                        ["Fraca", "Fraca", "Fraca", "Média", "Boa", "Forte"][
+                          forcaSenha
+                        ]
+                      }
+                    </span>
+                  </p>
+                  <div className="w-full h-2 mt-1 bg-gray-200 rounded">
+                    <div
+                      className="h-full rounded transition-all duration-300"
+                      style={{
+                        width: `${(forcaSenha / 5) * 100}%`,
+                        backgroundColor: [
+                          "#dc2626",
+                          "#dc2626",
+                          "#dc2626",
+                          "#f59e0b",
+                          "#84cc16",
+                          "#16a34a",
+                        ][forcaSenha],
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </>
           </div>
         ))}
 

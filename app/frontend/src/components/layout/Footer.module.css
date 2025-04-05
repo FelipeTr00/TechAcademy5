@@ -2,7 +2,7 @@
   background-color: #ff8e3c;
   text-align: center;
   padding: 10px;
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
   z-index: 100;

@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../components/utils/errors";
+import {
+  calcularForcaSenha,
+  camposFormulario,
+} from "../components/utils/formUtils";
 import api from "../services/api";
 import styles from "./RegisterUser.module.css";
 
@@ -17,22 +21,23 @@ const RegisterUser = () => {
     confirmarSenha: "",
   });
 
+  const [forcaSenha, setForcaSenha] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]:
-        name === "telefone" || name === "cpf"
-          ? value.replace(/\D/g, "")
-          : value,
-    });
+    const novoValor = ["telefone", "cpf"].includes(name)
+      ? value.replace(/\D/g, "")
+      : value;
+
+    setFormData((prev) => ({ ...prev, [name]: novoValor }));
+
+    if (name === "senha") setForcaSenha(calcularForcaSenha(value));
   };
 
-  const validarFormulario = () => {
+  const validarFormulario = (): boolean => {
     const { nome, sobrenome, email, telefone, cpf, senha, confirmarSenha } =
       formData;
 
@@ -48,31 +53,22 @@ const RegisterUser = () => {
       setError("Preencha todos os campos");
       return false;
     }
-
-    if (senha !== confirmarSenha) {
-      setError("As senhas não coincidem");
-      return false;
+    if (senha !== confirmarSenha)
+      return setError("As senhas não coincidem"), false;
+    if (!email.includes("@") || !email.includes(".com"))
+      return setError("Email inválido."), false;
+    if (senha.length < 12)
+      return setError("A senha deve ter no mínimo 12 caracteres."), false;
+    if (calcularForcaSenha(senha) < 4) {
+      return (
+        setError(
+          "Senha fraca. Use letras maiúsculas, minúsculas, números e símbolos."
+        ),
+        false
+      );
     }
-
-    if (!email.includes("@") || !email.includes(".com")) {
-      setError("Email inválido.");
-      return false;
-    }
-
-    if (senha.length < 12) {
-      setError("A senha deve ter no mínimo 12 caracteres.");
-      return false;
-    }
-
-    if (telefone.length < 11) {
-      setError("O telefone deve ter no mínimo 11 dígitos.");
-      return false;
-    }
-
-    if (cpf.length < 11) {
-      setError("O CPF deve ter no mínimo 11 dígitos.");
-      return false;
-    }
+    if (telefone.length < 11) return setError("Telefone inválido."), false;
+    if (cpf.length < 11) return setError("CPF inválido."), false;
 
     setError(null);
     return true;
@@ -83,10 +79,7 @@ const RegisterUser = () => {
     setLoading(true);
     setSuccess(null);
 
-    if (!validarFormulario()) {
-      setLoading(false);
-      return;
-    }
+    if (!validarFormulario()) return setLoading(false);
 
     const payload = {
       name: `${formData.nome.trim()} ${formData.sobrenome.trim()}`,
@@ -110,12 +103,11 @@ const RegisterUser = () => {
         senha: "",
         confirmarSenha: "",
       });
+      setForcaSenha(0);
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 5000);
-    } catch (error) {
-      setError(getErrorMessage(error));
+      setTimeout(() => navigate("/login"), 5000);
+    } catch (err) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -128,45 +120,7 @@ const RegisterUser = () => {
       {success && <p className={styles.success}>{success}</p>}
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        {[
-          {
-            label: "Nome",
-            name: "nome",
-            type: "text",
-            placeholder: "*Digite seu nome",
-          },
-          {
-            label: "Sobrenome",
-            name: "sobrenome",
-            type: "text",
-            placeholder: "*Digite seu sobrenome",
-          },
-          {
-            label: "Email",
-            name: "email",
-            type: "email",
-            placeholder: "*Email",
-          },
-          {
-            label: "Telefone",
-            name: "telefone",
-            type: "tel",
-            placeholder: "*Telefone",
-          },
-          { label: "CPF", name: "cpf", type: "text", placeholder: "*CPF" },
-          {
-            label: "Senha",
-            name: "senha",
-            type: "password",
-            placeholder: "*Senha",
-          },
-          {
-            label: "Confirmar Senha",
-            name: "confirmarSenha",
-            type: "password",
-            placeholder: "*Confirmar Senha",
-          },
-        ].map(({ label, name, type, placeholder }) => (
+        {camposFormulario.map(({ label, name, type, placeholder }) => (
           <div className={styles.campo} key={name}>
             <label htmlFor={name}>{label}</label>
             <input
@@ -177,11 +131,40 @@ const RegisterUser = () => {
               value={formData[name as keyof typeof formData]}
               onChange={handleChange}
             />
+            {name === "senha" && (
+              <div className={styles.forcaSenha}>
+                <p>
+                  Força da Senha:{" "}
+                  <strong>
+                    {
+                      ["Fraca", "Fraca", "Fraca", "Média", "Boa", "Forte"][
+                        forcaSenha
+                      ]
+                    }
+                  </strong>
+                </p>
+                <div className={styles.barraContainer}>
+                  <div
+                    className={styles.barra}
+                    style={{
+                      width: `${(forcaSenha / 5) * 100}%`,
+                      backgroundColor: [
+                        "red",
+                        "red",
+                        "red",
+                        "orange",
+                        "yellowgreen",
+                        "green",
+                      ][forcaSenha],
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         ))}
-
         <button type="submit" className={styles.btn} disabled={loading}>
-          {loading ? "Cadastrando" : "Finalizar"}
+          {loading ? "Cadastrando..." : "Finalizar"}
         </button>
       </form>
     </div>

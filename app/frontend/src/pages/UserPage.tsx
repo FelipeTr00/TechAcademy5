@@ -9,7 +9,7 @@ const UserPage = () => {
     { title: "Editar Usuário", path: "/editUser/:userId" },
     { title: "Minhas Vendas", path: "/mySell" },
     { title: "Meu Perfil", path: "/myUser" },
-    { title: "Meus Favoritos", path: "/myFavorites" },
+    { title: "Meus Anúncios", path: "/MyAds/:userId" },
     { title: "Meus Carros", path: "/myCars" },
   ];
 
