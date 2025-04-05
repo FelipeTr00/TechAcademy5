@@ -12,6 +12,7 @@ import MyAds from "./pages/MyAds";
 import RegisterUser from "./pages/RegisterUser";
 import Sell from "./pages/Sell";
 import UserPage from "./pages/UserPage";
+import ReviewPage from "./pages/Review";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/registerUser" element={<RegisterUser />} />
             <Route path="/sell" element={<Sell />} />
             <Route path="/buy" element={<Buy />} />
+            <Route path="/reviews" element={<ReviewPage />} />
 
             {/* Rotas Privadas */}
             <Route

@@ -1,0 +1,103 @@
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .reviewForm {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .reviewForm input,
+  .reviewForm textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .reviewForm input:focus,
+  .reviewForm textarea:focus {
+    border-color: #1e90ff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+  }
+  
+  .reviewForm textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .reviewForm button {
+    padding: 14px;
+    background-color: #1e90ff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .reviewForm button:hover {
+    background-color: #0073e6;
+  }
+  
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .card {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #0d6efd;
+  }
+  
+  .card h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+  }
+  
+  .card p {
+    font-size: 14px;
+    margin: 4px 0;
+  }
+  
+  .actions {
+    margin-top: 10px;
+  }
+  
+  .actions button {
+    background: transparent;
+    border: none;
+    color: #d00;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .vehiclePreview {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+  }
+  

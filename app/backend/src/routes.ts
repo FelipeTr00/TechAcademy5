@@ -12,6 +12,13 @@ import { createVehicle,
          getByFilters,
          getByFipeCode,
          updateVehicle } from './controller/VehicleController';
+         import {
+            createReview,
+            getAllReviews,
+            getReviewById,
+            updateReview,
+            deleteReview,
+          } from "./controller/ReviewController";
 
 const router = Router();
 
@@ -499,6 +506,142 @@ router.put('/update-vehicle/:id', updateVehicle);
  *         description: Veículo não encontrado
  */
 router.delete('/delete-vehicle/:id', destroyVehicle);
+
+
+/**
+ * @swagger
+ * /reviews:
+ *   get:
+ *     summary: Lista todos os reviews
+ *     tags: [Review]
+ *     responses:
+ *       200:
+ *         description: Lista de reviews.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Review'
+ */
+router.get("/reviews", getAllReviews);
+
+/**
+ * @swagger
+ * /reviews/{id}:
+ *   get:
+ *     summary: Retorna um review pelo seu ID
+ *     tags: [Review]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID do review
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Dados do review encontrado.
+ *       404:
+ *         description: Review não encontrado.
+ */
+router.get("/reviews/:id", getReviewById);
+
+/**
+ * @swagger
+ * /reviews:
+ *   post:
+ *     summary: Cria um novo review
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Excelente Produto"
+ *               content:
+ *                 type: string
+ *                 example: "Gostei bastante da experiência com esse produto."
+ *               rating:
+ *                 type: number
+ *                 example: 5
+ *     responses:
+ *       201:
+ *         description: Review criado com sucesso.
+ *       400:
+ *         description: Dados inválidos.
+ *       500:
+ *         description: Erro interno.
+ */
+router.post("/reviews", authenticateToken, createReview);
+
+/**
+ * @swagger
+ * /reviews/{id}:
+ *   put:
+ *     summary: Atualiza um review existente
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID do review a ser atualizado
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Novo Título"
+ *               content:
+ *                 type: string
+ *                 example: "Texto atualizado do review."
+ *               rating:
+ *                 type: number
+ *                 example: 4
+ *     responses:
+ *       200:
+ *         description: Review atualizado com sucesso.
+ *       404:
+ *         description: Review não encontrado.
+ */
+router.put("/reviews/:id", authenticateToken, updateReview);
+
+/**
+ * @swagger
+ * /reviews/{id}:
+ *   delete:
+ *     summary: Exclui um review pelo ID
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID do review a ser excluído
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Review excluído com sucesso.
+ *       404:
+ *         description: Review não encontrado.
+ */
+router.delete("/reviews/:id", authenticateToken, deleteReview);
 
 
 export default router;

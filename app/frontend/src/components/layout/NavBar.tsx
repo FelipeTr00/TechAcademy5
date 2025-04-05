@@ -24,11 +24,9 @@ function Navbar() {
           <Link to="/sell">Vender</Link>
         </li>
         <li className={styles.item}>
-          <Link to="/services">Serviços</Link>
+          <Link to="/reviews">Reviews</Link>
         </li>
-        <li className={styles.item}>
-          <Link to="/about">Sobre</Link>
-        </li>
+
       </ul>
 
       {/*CODIGO DO LADO DIREITO*/}

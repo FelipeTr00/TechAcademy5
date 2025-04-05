@@ -1,74 +1,111 @@
-import { getErrorMessage } from "@/components/utils/errors";
+import { useState } from "react";
 import api from "@/services/api";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import styles from "./Buy.module.css";
 
-type DadosCars = {
+type Vehicle = {
+  id: number;
+  CodigoFipe: string;
+  Tipo: string;
   Marca: string;
   Modelo: string;
-  anoModelo: string;
-  valor: string;
-  fipe: string;
-  imagem: string;
+  Combustivel: string;
+  anoModelo: number;
+  Valor: string;
+  ValorFipe: string;
 };
 
 const Buy = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const [carros, setCarros] = useState<DadosCars[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [tipo, setTipo] = useState("carros");
+  const [anoModelo, setAnoModelo] = useState<number>(2020);
+  const [veiculos, setVeiculos] = useState<Vehicle[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      alert("Você não está Logado!");
-      navigate("/login");
+  const buscarVeiculos = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.post<Vehicle[]>("/get-vehicles", {
+        Tipo: tipo,
+        anoModelo,
+      });
+      setVeiculos(data);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      alert("Erro ao buscar veículos.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const fetchCarros = async () => {
-      try {
-        const { data } = await api.get<DadosCars[]>("/getByFilters");
-        setCarros(data);
-      } catch (error) {
-        setError(getErrorMessage(error));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCarros();
-  }, [isAuthenticated, navigate]);
-
-  if (loading) return <p>Carregando...</p>;
-  if (error) return <p>{error}</p>;
+  const veiculosFiltrados = veiculos.filter((v) =>
+    v.Modelo.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
+        <h3>Filtros</h3>
+        <label>
+          Tipo:
+          <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
+            <option value="carros">Carros</option>
+            <option value="motos">Motos</option>
+            <option value="caminhoes">Caminhões</option>
+          </select>
+        </label>
+        <label>
+          Ano Modelo:
+          <input
+            type="number"
+            value={anoModelo}
+            onChange={(e) => setAnoModelo(Number(e.target.value))}
+          />
+        </label>
+        <button onClick={buscarVeiculos} disabled={loading}>
+          {loading ? "Buscando..." : "Buscar"}
+        </button>
+
         <input
           type="text"
-          placeholder="Buscar carros..."
+          placeholder="Buscar por modelo"
           className={styles.searchInput}
-          onChange={(e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            setCarros((prevCarros) =>
-              prevCarros.filter((carro) =>
-                carro.Modelo.toLowerCase().includes(searchTerm)
-              )
-            );
-          }}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </aside>
-      <div className={styles.content}>
-        <h1>Página de Compra</h1>
+
+      <main className={styles.content}>
+        <h1>Veículos disponíveis</h1>
+        {loading && <p>Carregando...</p>}
+        {veiculosFiltrados.length === 0 && !loading && (
+          <p>Nenhum veículo encontrado.</p>
+        )}
         <div className={styles.grid}>
-          {carros.map((carro) => (
-            <Card key={carro.id} {...carro} />
+          {veiculosFiltrados.map((v) => (
+            <div key={v.id} className={styles.card}>
+              <h3>
+                {v.Marca} - {v.Modelo}
+              </h3>
+              <p>
+                <strong>Ano:</strong> {v.anoModelo}
+              </p>
+              <p>
+                <strong>Combustível:</strong> {v.Combustivel}
+              </p>
+              <p>
+                <strong>Preço:</strong> R${" "}
+                {parseFloat(v.ValorFipe).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+              <p>
+                <strong>Código Fipe:</strong> {v.CodigoFipe}
+              </p>{" "}{}
+            </div>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
