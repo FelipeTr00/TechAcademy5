@@ -35,7 +35,7 @@ const EditUser = () => {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const response = await api.get('/get-user');
+        const response = await api.get("/get-user");
         const { name, email } = response.data.user;
 
         const [nome, ...rest] = name.split(" ");
@@ -138,7 +138,7 @@ const EditUser = () => {
               placeholder={placeholder}
               value={formData[name as keyof typeof formData]}
               onChange={handleChange}
-              disabled={name === "email"} // desabilita o campo de e-mail
+              disabled={name === "email"}
             />
             {name === "senha" && (
               <div className={styles.forcaSenha}>
@@ -158,7 +158,12 @@ const EditUser = () => {
                     style={{
                       width: `${(forcaSenha / 5) * 100}%`,
                       backgroundColor: [
-                        "red", "red", "red", "orange", "yellowgreen", "green",
+                        "red",
+                        "red",
+                        "red",
+                        "orange",
+                        "yellowgreen",
+                        "green",
                       ][forcaSenha],
                     }}
                   />
