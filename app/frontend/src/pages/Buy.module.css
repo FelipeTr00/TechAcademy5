@@ -58,7 +58,8 @@
 }
 
 .sidebar button:hover {
-  background-color: #e5772c;
+  background-color: #0d0d0d;
+  color: #ff8e3c;
 }
 
 .searchInput {

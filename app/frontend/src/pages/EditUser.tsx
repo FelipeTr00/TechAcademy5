@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../components/utils/errors";
-import { calcularForcaSenha } from "../components/utils/formUtils";
+import {
+  calcularForcaSenha,
+  camposFormulario,
+} from "../components/utils/formUtils";
 import { useAuth } from "../contexts/AuthContext";
+import styles from "../pages/EditUser.module.css";
 import api from "../services/api";
 
 const EditUser = () => {
@@ -117,119 +121,72 @@ const EditUser = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white border border-gray-300 rounded-lg shadow-md border-t-4 border-blue-600">
-      <h1 className="text-lg font-semibold mb-3">Editar Usuário</h1>
+    <div className={styles.register}>
+      <h1 className={styles.title}>Editar Usuário</h1>
 
-      {error && (
-        <div className="mb-3 p-2 text-red-700 bg-red-100 border border-red-500 rounded text-sm">
-          <strong>Erro:</strong> {error}
-        </div>
-      )}
+      {error && <p className={styles.error}>{error}</p>}
+      {success && <p className={styles.success}>{success}</p>}
 
-      {success && (
-        <div className="mb-3 p-2 text-green-700 bg-green-100 border border-green-500 rounded text-sm">
-          <strong>Sucesso:</strong> {success}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-2">
-        {[
-          "nome",
-          "sobrenome",
-          "email",
-          "telefone",
-          "cpf",
-          "senha",
-          "confirmarSenha",
-        ].map((field) => (
-          <div key={field} className="flex flex-col items-center">
-            <label
-              htmlFor={field}
-              className="font-medium text-sm capitalize mb-1 w-full max-w-[350px]"
-            >
-              {field === "confirmarSenha"
-                ? "Confirmar Senha"
-                : field.charAt(0).toUpperCase() + field.slice(1)}
-            </label>
-            <>
-              <input
-                type={field.includes("senha") ? "password" : "text"}
-                id={field}
-                name={field}
-                value={formData[field as keyof typeof formData]}
-                onChange={handleChange}
-                disabled={field === "email"}
-                placeholder={
-                  field === "email" ? "*Não é possível editar o email" : ""
-                }
-                required={field !== "email"}
-                className="w-72 md:w-[350px] h-9 px-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-              />
-
-              {field === "senha" && (
-                <div className="w-72 md:w-[350px] text-xs text-left mt-1">
-                  <p>
-                    Força da Senha:{" "}
-                    <span
-                      className={`font-semibold ${
-                        forcaSenha < 3
-                          ? "text-red-600"
-                          : forcaSenha === 3
-                          ? "text-yellow-600"
-                          : forcaSenha === 4
-                          ? "text-green-600"
-                          : "text-green-800"
-                      }`}
-                    >
-                      {
-                        ["Fraca", "Fraca", "Fraca", "Média", "Boa", "Forte"][
-                          forcaSenha
-                        ]
-                      }
-                    </span>
-                  </p>
-                  <div className="w-full h-2 mt-1 bg-gray-200 rounded">
-                    <div
-                      className="h-full rounded transition-all duration-300"
-                      style={{
-                        width: `${(forcaSenha / 5) * 100}%`,
-                        backgroundColor: [
-                          "#dc2626",
-                          "#dc2626",
-                          "#dc2626",
-                          "#f59e0b",
-                          "#84cc16",
-                          "#16a34a",
-                        ][forcaSenha],
-                      }}
-                    />
-                  </div>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        {camposFormulario.map(({ label, name, type, placeholder }) => (
+          <div className={styles.campo} key={name}>
+            <label htmlFor={name}>{label}</label>
+            <input
+              type={type}
+              id={name}
+              name={name}
+              placeholder={placeholder}
+              value={formData[name as keyof typeof formData]}
+              onChange={handleChange}
+            />
+            {name === "senha" && (
+              <div className={styles.forcaSenha}>
+                <p>
+                  Força da Senha:{" "}
+                  <strong>
+                    {
+                      ["Fraca", "Fraca", "Fraca", "Média", "Boa", "Forte"][
+                        forcaSenha
+                      ]
+                    }
+                  </strong>
+                </p>
+                <div className={styles.barraContainer}>
+                  <div
+                    className={styles.barra}
+                    style={{
+                      width: `${(forcaSenha / 5) * 100}%`,
+                      backgroundColor: [
+                        "red",
+                        "red",
+                        "red",
+                        "orange",
+                        "yellowgreen",
+                        "green",
+                      ][forcaSenha],
+                    }}
+                  />
                 </div>
-              )}
-            </>
+              </div>
+            )}
           </div>
         ))}
 
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center gap-4 mt-4">
+          <button type="submit" className={styles.btn} disabled={loading}>
+            {loading ? "Salvando..." : "Salvar"}
+          </button>
+
           <button
-            type="submit"
-            className="w-28 md:w-[210px] bg-orange-600 text-white py-2 text-base rounded-md hover:bg-orange-700 disabled:bg-gray-400"
+            className={styles.btnDelete}
+            type="button"
+            onClick={handleDeleteAccount}
             disabled={loading}
           >
-            {loading ? "Salvando..." : "Salvar"}
+            {loading ? "Deletando..." : "Deletar Conta"}
           </button>
         </div>
       </form>
-
-      <div className="flex flex-col items-center">
-        <button
-          className="w-28 md:w-[210px] mt-3 bg-red-600 text-white py-2 text-base rounded-md hover:bg-red-800 disabled:bg-gray-400 cursor-pointer"
-          onClick={handleDeleteAccount}
-          disabled={loading}
-        >
-          {loading ? "Deletando..." : "Deletar Conta"}
-        </button>
-      </div>
     </div>
   );
 };

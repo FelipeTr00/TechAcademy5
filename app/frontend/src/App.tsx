@@ -1,5 +1,4 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import "./App.css";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/NavBar";
 import PrivateRoute from "./components/utils/PrivateRoute";
@@ -10,16 +9,16 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import MyAds from "./pages/MyAds";
 import RegisterUser from "./pages/RegisterUser";
+import ReviewPage from "./pages/Review";
 import Sell from "./pages/Sell";
 import UserPage from "./pages/UserPage";
-import ReviewPage from "./pages/Review";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <div className="flex-1 container">
+        <div className="flex-1 ">
           <Routes>
             {/* Rotas Públicas */}
             <Route path="/login" element={<Login />} />
