@@ -78,7 +78,7 @@ const Buy = () => {
         <h1>Veículos disponíveis</h1>
         {loading && <p>Carregando...</p>}
         {veiculosFiltrados.length === 0 && !loading && (
-          <p>Nenhum veículo encontrado.</p>
+          <p>Utilize os filtros para encontrar o que deseja.</p>
         )}
         <div className={styles.grid}>
           {veiculosFiltrados.map((v) => (
