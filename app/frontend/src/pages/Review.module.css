@@ -8,10 +8,10 @@
 
 .reviewForm {
   background-color: #fff;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #ff8e3c;
   padding: 32px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px #ff8e3c;
   display: flex;
   flex-direction: column;
   gap: 16px;

@@ -10,7 +10,7 @@
   padding: 24px;
   background-color: #ffffff;
   border-right: 1px solid #e0e0e0;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 2px 0 6px #ff8e3c;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -18,7 +18,7 @@
 
 .sidebar h3 {
   font-size: 18px;
-  color: #333;
+  color: #0d0d0d;
 }
 
 .sidebar label {
@@ -34,7 +34,7 @@
 .sidebar input[type="text"] {
   padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #0d0d0d;
   font-size: 14px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -43,7 +43,7 @@
 .sidebar input:focus {
   border-color: #ff8e3c;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(255, 142, 60, 0.15);
+  box-shadow: 0 0 0 2px #ff8e3c;
 }
 
 .sidebar button {
@@ -91,6 +91,7 @@
   font-size: 26px;
   font-weight: bold;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .grid {
@@ -105,10 +106,10 @@
 
 .card {
   background-color: #ffffff;
-  border: 1px solid #ddd;
+  border: 1px solid #ff8e3c;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 2px 10px #ff8e3c;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -128,4 +129,25 @@
 .card p {
   font-size: 14px;
   color: #555;
+}
+
+.bottomButton {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.bottomButton button {
+  padding: 0.75rem 1.5rem;
+  background-color: #ff8e3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bottomButton button:hover {
+  background-color: #0d0d0d;
+  color: #ff8e3c;
 }

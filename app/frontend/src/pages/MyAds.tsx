@@ -4,16 +4,17 @@ import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface Vehicle {
-  id: string;
-  marca: string;
-  modelo: string;
-  anoModelo: string;
-  valor: number;
-  fipe: string;
-  imagem: string;
-  descricao: string;
-}
+type Vehicle = {
+  id: number;
+  CodigoFipe: string;
+  Tipo: string;
+  Marca: string;
+  Modelo: string;
+  Combustivel: string;
+  anoModelo: number;
+  Valor: string;
+  ValorFipe: string;
+};
 
 const MyAds = () => {
   const { isAuthenticated } = useAuth();
@@ -51,7 +52,6 @@ const MyAds = () => {
       setLoading(true);
       await api.delete(`/delete-Vehicle/${id}`);
       setSuccess("Anúncio excluído com sucesso!");
-      setAds((prevAds) => prevAds.filter((ad) => ad.id !== id));
     } catch (error) {
       setError(getErrorMessage(error));
     } finally {

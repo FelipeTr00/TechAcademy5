@@ -1,4 +1,5 @@
 import { getErrorMessage } from "@/components/utils/errors";
+import { VehicleData } from "@/components/utils/TypesVehicle";
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
@@ -12,13 +13,15 @@ const EditVehicle = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    marca: "",
-    modelo: "",
+  const [formData, setFormData] = useState<VehicleData>({
+    CodigoFipe: "",
+    Tipo: "Carro",
+    Marca: "",
+    Modelo: "",
+    Combustivel: "",
     anoModelo: "",
-    valor: "",
-    fipe: "",
-    imagem: "",
+    Valor: "",
+    ValorFipe: "",
   });
 
   useEffect(() => {
@@ -47,21 +50,22 @@ const EditVehicle = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData({ ...formData, imagem: URL.createObjectURL(file) });
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
     try {
-      await api.put(`/update-Vehicle/${vehicleId}`, formData);
-      setSuccess("Veículo atualizado com sucesso!");
+      const payload = {
+        ...formData,
+        anoModelo: Number(formData.anoModelo),
+        ValorFipe: Number(formData.ValorFipe),
+      };
+      await api.put(`/update-vehicle`, payload);
+      setSuccess("Veículo Atualizado com sucesso!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
     } catch (error) {
       setError(getErrorMessage(error));
     } finally {
@@ -70,55 +74,49 @@ const EditVehicle = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 mt-10 border border-gray-300 rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Editar Veículo</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
+    <div className="max-w-md mx-auto p-4 mt-8 mb-8 border border-gray-300 rounded shadow-md ">
+      <h2 className="text-2xl font-bold mb-4">Atualizar Veículo</h2>
+      {error && (
+        <div
+          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+          role="alert"
+        >
+          <p className="font-bold">Erro</p>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {success && (
+        <div
+          className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+          role="alert"
+        >
+          <p className="font-bold">Sucesso</p>
+          <p>{success}</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {Object.keys(formData).map((key) =>
-          key !== "imagem" ? (
-            <div key={key} className="flex flex-col">
-              <label htmlFor={key} className="mb-1 font-medium capitalize">
-                {key}
-              </label>
-              <input
-                id={key}
-                name={key}
-                value={formData[key as keyof typeof formData]}
-                onChange={handleChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-          ) : (
-            <div key={key} className="flex flex-col">
-              <label htmlFor={key} className="mb-1 font-medium">
-                Imagem
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                id={key}
-                name={key}
-                onChange={handleImageChange}
-                className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-              {formData.imagem && (
-                <img
-                  src={formData.imagem}
-                  alt="Pré-visualização"
-                  className="mt-2 max-h-40 object-contain"
-                />
-              )}
-            </div>
-          )
-        )}
+        {Object.keys(formData).map((key) => (
+          <div key={key} className="flex flex-col">
+            <label htmlFor={key} className="mb-1 font-medium capitalize">
+              {key}
+            </label>
+            <input
+              id={key}
+              name={key}
+              value={formData[key as keyof typeof formData]}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </div>
+        ))}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
           disabled={loading}
         >
-          {loading ? "Salvando..." : "Salvar Alterações"}
+          {loading ? "Atualizando..." : "Salvar"}
         </button>
       </form>
     </div>

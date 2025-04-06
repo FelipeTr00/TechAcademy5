@@ -50,7 +50,7 @@ const Sell = () => {
       // Limpa o formulário
       setFormData({
         CodigoFipe: "",
-        Tipo: "Carro",
+        Tipo: "",
         Marca: "",
         Modelo: "",
         Combustivel: "",
@@ -66,10 +66,27 @@ const Sell = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 mt-10 border border-gray-300 rounded shadow-md">
+    <div className="max-w-md mx-auto p-4 mt-8 mb-8 border border-gray-300 rounded shadow-md ">
       <h2 className="text-2xl font-bold mb-4">Anunciar Veículo</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
+      {error && (
+        <div
+          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+          role="alert"
+        >
+          <p className="font-bold">Erro</p>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {success && (
+        <div
+          className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+          role="alert"
+        >
+          <p className="font-bold">Sucesso</p>
+          <p>{success}</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         {Object.keys(formData).map((key) => (
           <div key={key} className="flex flex-col">

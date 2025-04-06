@@ -1,5 +1,5 @@
-import { useState } from "react";
 import api from "@/services/api";
+import { useState } from "react";
 import styles from "./Buy.module.css";
 
 type Vehicle = {
@@ -74,7 +74,7 @@ const Buy = () => {
         />
       </aside>
 
-      <main className={styles.content}>
+      <div className={styles.content}>
         <h1>Veículos disponíveis</h1>
         {loading && <p>Carregando...</p>}
         {veiculosFiltrados.length === 0 && !loading && (
@@ -101,11 +101,23 @@ const Buy = () => {
               </p>
               <p>
                 <strong>Código Fipe:</strong> {v.CodigoFipe}
-              </p>{" "}{}
+              </p>{" "}
+              {}
+              {veiculosFiltrados.length > 0 && (
+                <div className={styles.bottomButton}>
+                  <button
+                    onClick={() =>
+                      alert("Oferta enviada para o email cadastrado")
+                    }
+                  >
+                    Receber Oferta
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

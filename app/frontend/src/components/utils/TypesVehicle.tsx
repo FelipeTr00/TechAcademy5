@@ -1,5 +1,5 @@
 export type VehicleData = {
-  CodigoFipe?: string;
+  CodigoFipe: string;
   Tipo: string;
   Marca: string;
   Modelo: string;

@@ -1,4 +1,4 @@
-import { Model, DataTypes, Optional } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import database from "../config";
 
 export interface IReview {
@@ -6,14 +6,18 @@ export interface IReview {
   title: string;
   content: string;
   rating?: number;
-  userId: number; // FK para o autor da review
+  userId: number; // FK para o autor da revieww
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface IReviewAttributes extends Optional<IReview, "id" | "createdAt" | "updatedAt" | "rating"> {}
+export interface IReviewAttributes
+  extends Optional<IReview, "id" | "createdAt" | "updatedAt" | "rating"> {}
 
-export class Review extends Model<IReview, IReviewAttributes> implements IReview {
+export class Review
+  extends Model<IReview, IReviewAttributes>
+  implements IReview
+{
   public id!: number;
   public title!: string;
   public content!: string;
@@ -36,7 +40,7 @@ Review.init(
       allowNull: false,
     },
     content: {
-      type: new DataTypes.TEXT,
+      type: new DataTypes.TEXT(),
       allowNull: false,
     },
     rating: {
