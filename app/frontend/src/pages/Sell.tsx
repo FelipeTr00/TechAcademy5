@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { VehicleData } from "../components/utils/TypesVehicle";
 
 const Sell = () => {
   const { isAuthenticated } = useAuth();
@@ -11,13 +12,15 @@ const Sell = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    marca: "",
-    modelo: "",
+  const [formData, setFormData] = useState<VehicleData>({
+    CodigoFipe: "",
+    Tipo: "Carro",
+    Marca: "",
+    Modelo: "",
+    Combustivel: "",
     anoModelo: "",
-    valor: "",
-    fipe: "",
-    imagem: "",
+    Valor: "",
+    ValorFipe: "",
   });
 
   useEffect(() => {
@@ -31,28 +34,29 @@ const Sell = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData({ ...formData, imagem: URL.createObjectURL(file) });
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
     try {
-      await api.post(`/createVehicle`, formData);
+      const payload = {
+        ...formData,
+        anoModelo: Number(formData.anoModelo),
+        ValorFipe: Number(formData.ValorFipe),
+      };
+      await api.post(`/create-vehicle`, payload);
       setSuccess("Veículo anunciado com sucesso!");
+      // Limpa o formulário
       setFormData({
-        marca: "",
-        modelo: "",
+        CodigoFipe: "",
+        Tipo: "Carro",
+        Marca: "",
+        Modelo: "",
+        Combustivel: "",
         anoModelo: "",
-        valor: "",
-        fipe: "",
-        imagem: "",
+        Valor: "",
+        ValorFipe: "",
       });
     } catch (error) {
       setError(getErrorMessage(error));
@@ -67,44 +71,21 @@ const Sell = () => {
       {error && <p className="text-red-500">{error}</p>}
       {success && <p className="text-green-500">{success}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {Object.keys(formData).map((key) =>
-          key !== "imagem" ? (
-            <div key={key} className="flex flex-col">
-              <label htmlFor={key} className="mb-1 font-medium capitalize">
-                {key}
-              </label>
-              <input
-                id={key}
-                name={key}
-                value={formData[key as keyof typeof formData]}
-                onChange={handleChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-          ) : (
-            <div key={key} className="flex flex-col">
-              <label htmlFor={key} className="mb-1 font-medium">
-                Imagem
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                id={key}
-                name={key}
-                onChange={handleImageChange}
-                className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-              {formData.imagem && (
-                <img
-                  src={formData.imagem}
-                  alt="Pré-visualização"
-                  className="mt-2 max-h-40 object-contain"
-                />
-              )}
-            </div>
-          )
-        )}
+        {Object.keys(formData).map((key) => (
+          <div key={key} className="flex flex-col">
+            <label htmlFor={key} className="mb-1 font-medium capitalize">
+              {key}
+            </label>
+            <input
+              id={key}
+              name={key}
+              value={formData[key as keyof typeof formData]}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </div>
+        ))}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
