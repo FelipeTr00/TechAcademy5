@@ -47,7 +47,9 @@ export const alterUser = async (
       throw new Error("Usuário ou senha inválidos.");
     }
 
-    await user.update(updateData);
+    const { email, ...sanitizedData } = updateData as any;
+
+    await user.update(sanitizedData);
     return user;
   } catch (error) {
     throw new Error("Erro ao atualizar usuário.");

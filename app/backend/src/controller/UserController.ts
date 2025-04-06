@@ -98,7 +98,7 @@ export const updateUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "[SUCESSO]", user: updatedUser });
   } catch (error) {
     const errMessage =
-      error instanceof Error ? error.message : "Erro desconhecido2.";
+      error instanceof Error ? error.message : "Erro no backend.";
     res.status(500).json({ message: errMessage });
   }
 };
@@ -117,7 +117,7 @@ export const patchUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "[SUCESSO]", user: updatedUser });
   } catch (error) {
     res.status(500).json({
-      message: error instanceof Error ? error.message : "Erro desconhecido3.",
+      message: error instanceof Error ? error.message : "Erro no backend.",
     });
   }
 };
@@ -135,7 +135,7 @@ export const destroyUser = async (req: Request, res: Response) => {
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
-      message: error instanceof Error ? error.message : "Erro desconhecido4.",
+      message: error instanceof Error ? error.message : "Erro no backend.",
     });
   }
 };

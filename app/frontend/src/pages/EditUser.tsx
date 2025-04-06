@@ -35,8 +35,9 @@ const EditUser = () => {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`/get-user/${userId}`);
-        const { name, email, cpf } = response.data;
+        const response = await api.get('/get-user');
+        const { name, email } = response.data.user;
+
         const [nome, ...rest] = name.split(" ");
         const sobrenome = rest.join(" ");
 
@@ -45,7 +46,6 @@ const EditUser = () => {
           nome,
           sobrenome,
           email,
-          cpf,
         }));
       } catch (error) {
         setError(getErrorMessage(error));
@@ -138,6 +138,7 @@ const EditUser = () => {
               placeholder={placeholder}
               value={formData[name as keyof typeof formData]}
               onChange={handleChange}
+              disabled={name === "email"} // desabilita o campo de e-mail
             />
             {name === "senha" && (
               <div className={styles.forcaSenha}>
@@ -157,12 +158,7 @@ const EditUser = () => {
                     style={{
                       width: `${(forcaSenha / 5) * 100}%`,
                       backgroundColor: [
-                        "red",
-                        "red",
-                        "red",
-                        "orange",
-                        "yellowgreen",
-                        "green",
+                        "red", "red", "red", "orange", "yellowgreen", "green",
                       ][forcaSenha],
                     }}
                   />
@@ -174,7 +170,7 @@ const EditUser = () => {
 
         <div className="flex flex-col items-center gap-4 mt-4">
           <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? "Salvando..." : "Salvar"}
+            {loading ? "Aguarde" : "Salvar"}
           </button>
 
           <button
@@ -183,11 +179,12 @@ const EditUser = () => {
             onClick={handleDeleteAccount}
             disabled={loading}
           >
-            {loading ? "Deletando..." : "Deletar Conta"}
+            {loading ? "Aguarde" : "Deletar Conta"}
           </button>
         </div>
       </form>
     </div>
   );
 };
+
 export default EditUser;
