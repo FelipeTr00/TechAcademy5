@@ -55,6 +55,7 @@ const RegisterUser = () => {
     }
     if (senha !== confirmarSenha)
       return setError("As senhas não coincidem"), false;
+
     if (!email.includes("@") || !email.includes(".com"))
       return setError("Email inválido."), false;
     if (senha.length < 12)

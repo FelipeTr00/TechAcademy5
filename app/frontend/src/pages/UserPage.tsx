@@ -10,7 +10,7 @@ const UserPage = () => {
     { title: "Minhas Vendas", path: "/mySell" },
     { title: "Meu Perfil", path: "/myUser" },
     { title: "Meus Anúncios", path: "/MyAds/:userId" },
-    { title: "Meus Carros", path: "/myCars" },
+    { title: "Editar Anúncios", path: "/editVehicle/:vehicleId" },
   ];
 
   useEffect(() => {

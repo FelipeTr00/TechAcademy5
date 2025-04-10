@@ -1,4 +1,3 @@
-// utils/formUtils.ts
 export const calcularForcaSenha = (senha: string) => {
   let forca = 0;
   if (senha.length >= 12) forca++;

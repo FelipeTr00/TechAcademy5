@@ -82,6 +82,21 @@ const EditUser = () => {
       setLoading(false);
       return;
     }
+    if (formData.senha.length < 12) {
+      setError("A senha deve ter pelo menos 12 caracteres.");
+      setLoading(false);
+      return;
+    }
+    if (formData.telefone.length < 11) {
+      setError("Telefone inválido.");
+      setLoading(false);
+      return;
+    }
+    if (formData.cpf.length < 11) {
+      setError("CPF inválido.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const updatePayload = {

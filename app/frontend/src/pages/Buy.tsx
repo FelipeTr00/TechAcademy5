@@ -1,5 +1,7 @@
+import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Buy.module.css";
 
 type Vehicle = {
@@ -20,6 +22,15 @@ const Buy = () => {
   const [veiculos, setVeiculos] = useState<Vehicle[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      alert("Você não está Logado!");
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   const buscarVeiculos = async () => {
     setLoading(true);
